@@ -1,6 +1,8 @@
 package studycard;
 
-import studycard.Card.CardType;
+import model.Card;
+import model.Deck;
+import model.Card.CardType;
 
 public class Test {
 

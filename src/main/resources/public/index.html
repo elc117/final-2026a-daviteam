@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Memoris</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #111827;
+      --surface:  #1F2937;
+      --surface2: #263042;
+      --border:   rgba(255,255,255,0.09);
+      --text:     #F0EDE6;
+      --muted:    #9CA3AF;
+      --sage:     #7EB8A4;
+      --sage-dim: #2a4f46;
+      --amber:    #F59E0B;
+      --amber-dim:#4B3209;
+      --rose:     #E07685;
+      --rose-dim: #4a1c25;
+      --sky:      #60A5FA;
+      --sky-dim:  #1e3a5f;
+      --card-h:   320px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0;
+      background: rgba(17,24,39,0.88);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+    }
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.5rem;
+      color: var(--sage);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .nav-back {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: color 0.15s, background 0.15s;
+    }
+    .nav-back:hover { color: var(--text); background: var(--surface); }
+    .nav-back svg { width: 16px; height: 16px; }
+
+    /* ── VIEWS ── */
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* ── HOME ── */
+    .home-header {
+      padding: 3.5rem 2rem 2rem;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .hero-panel {
+      display: grid;
+      grid-template-columns: 1.4fr 0.9fr;
+      gap: 18px;
+      align-items: stretch;
+      margin-bottom: 1.5rem;
+    }
+    .hero-copy,
+    .hero-stats {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.6rem;
+    }
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--sage);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.85rem;
+    }
+    .hero-kicker::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--sage);
+      box-shadow: 0 0 0 4px rgba(126,184,164,0.12);
+    }
+    .home-header h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2.7rem;
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: 0.8rem;
+    }
+    .home-header p {
+      color: var(--muted);
+      font-size: 14px;
+      max-width: 58ch;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 1.2rem;
+    }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: border-color 0.15s, transform 0.1s, background 0.15s;
+    }
+    .btn-secondary:hover { border-color: rgba(126,184,164,0.35); background: rgba(126,184,164,0.08); transform: translateY(-1px); }
+    .btn-secondary.primary {
+      background: var(--sage-dim);
+      color: var(--sage);
+      border-color: rgba(126,184,164,0.25);
+    }
+    .hero-stats {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+    .hero-stat {
+      padding: 0.95rem 1rem;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .hero-stat .label {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 0.2rem;
+    }
+    .hero-stat .value {
+      display: block;
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.2rem;
+      letter-spacing: -0.01em;
+    }
+    .hero-stat .desc {
+      display: block;
+      margin-top: 0.2rem;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .feature-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 1rem 0 0;
+    }
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem 1rem 1.05rem;
+    }
+    .feature-card .eyebrow {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.45rem;
+    }
+    .feature-card h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      margin-bottom: 0.3rem;
+    }
+    .feature-card p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .decks-grid {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem 4rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .deck-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.4rem 1.5rem;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+    .deck-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--sage);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .deck-card:hover { border-color: rgba(126,184,164,0.4); transform: translateY(-2px); }
+    .deck-card:hover::before { opacity: 1; }
+
+    .deck-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.15rem;
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+    }
+    .deck-stats {
+      display: flex;
+      gap: 12px;
+    }
+    .stat-pill {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+    .stat-pill.due   { background: var(--amber-dim); color: var(--amber); }
+    .stat-pill.total { background: rgba(255,255,255,0.06); color: var(--muted); }
+    .stat-pill svg   { width: 12px; height: 12px; }
+
+    .deck-review-btn {
+      margin-top: 1rem;
+      width: 100%;
+      padding: 8px;
+      background: var(--sage-dim);
+      color: var(--sage);
+      border: 1px solid rgba(126,184,164,0.25);
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .deck-review-btn:hover { background: rgba(126,184,164,0.25); border-color: var(--sage); }
+    .deck-review-btn:disabled { opacity: 0.4; cursor: default; }
+
+    /* ── DECK OVERVIEW ── */
+    .deck-overview {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 4rem;
+    }
+    .deck-overview h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+    .deck-overview .subtitle {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 2rem;
+    }
+    .cards-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+    .cards-table thead th {
+      text-align: left;
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0 12px 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .cards-table tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.12s;
+    }
+    .cards-table tbody tr:hover { background: var(--surface2); }
+    .cards-table tbody td {
+      padding: 12px 12px;
+      color: var(--text);
+    }
+    .cards-table .col-front { font-weight: 500; }
+    .cards-table .col-back  { color: var(--muted); }
+
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+      letter-spacing: 0.03em;
+    }
+    .badge-new     { background: var(--sky-dim); color: var(--sky); }
+    .badge-review  { background: var(--sage-dim); color: var(--sage); }
+    .badge-suspend { background: rgba(255,255,255,0.06); color: var(--muted); }
+    .badge-recog   { background: rgba(255,255,255,0.06); color: var(--muted); }
+    .badge-revtype { background: var(--sage-dim); color: var(--sage); }
+
+    .start-session-bar {
+      margin-top: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+    }
+    .start-session-bar p { font-size: 14px; color: var(--muted); }
+    .start-session-bar strong { color: var(--text); }
+    .btn-primary {
+      background: var(--sage);
+      color: #0a1f1a;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 22px;
+      cursor: pointer;
+      transition: filter 0.15s, transform 0.1s;
+    }
+    .btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+    /* ── REVIEW ── */
+    .review-view {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2rem 2rem 4rem;
+    }
+    .review-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+    .review-deck-name {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .review-counter {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .review-counter span { color: var(--text); font-weight: 600; }
+
+    .progress-bar-wrap {
+      height: 3px;
+      background: var(--surface2);
+      border-radius: 2px;
+      margin-bottom: 2.5rem;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--sage);
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+
+    /* FLIP CARD — the signature element */
+    .flip-scene {
+      perspective: 1200px;
+      height: var(--card-h);
+      margin-bottom: 1.5rem;
+      cursor: pointer;
+    }
+    .flip-card {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1);
+    }
+    .flip-card.flipped { transform: rotateY(180deg); }
+
+    .card-face {
+      position: absolute;
+      inset: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      backface-visibility: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem;
+      text-align: center;
+    }
+    .card-face-back { transform: rotateY(180deg); background: var(--surface2); }
+
+    .card-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+    .card-content {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.7rem;
+      font-weight: 400;
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+    }
+    .card-hint {
+      margin-top: 1.5rem;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .card-type-badge {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 3px 8px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+    }
+
+    /* ANSWER BUTTONS */
+    .review-actions-prompt {
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 0.75rem;
+    }
+    .review-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+    .review-buttons.hidden { visibility: hidden; pointer-events: none; }
+
+    .rating-btn {
+      border: none;
+      border-radius: 12px;
+      padding: 14px 8px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: filter 0.15s, transform 0.1s;
+    }
+    .rating-btn:hover  { filter: brightness(1.12); transform: translateY(-2px); }
+    .rating-btn:active { transform: translateY(0); }
+    .rating-btn .key-hint {
+      font-size: 10px;
+      font-weight: 400;
+      opacity: 0.65;
+    }
+    .btn-miss { background: var(--rose-dim); color: var(--rose); border: 1px solid rgba(224,118,133,0.3); }
+    .btn-hard { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
+    .btn-easy { background: var(--sky-dim);  color: var(--sky);  border: 1px solid rgba(96,165,250,0.3); }
+
+    /* DONE SCREEN */
+    .done-screen {
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+    .done-screen .checkmark {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: var(--sage-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+    }
+    .done-screen .checkmark svg { color: var(--sage); width: 32px; height: 32px; }
+    .done-screen h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+    }
+    .done-screen p { color: var(--muted); font-size: 14px; margin-bottom: 2rem; }
+    .done-stats { display: flex; justify-content: center; gap: 2.5rem; margin-bottom: 2.5rem; }
+    .done-stat { text-align: center; }
+    .done-stat .val { font-size: 1.8rem; font-weight: 600; }
+    .done-stat .lbl { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .val-miss { color: var(--rose); }
+    .val-hard { color: var(--amber); }
+    .val-easy { color: var(--sage); }
+
+    /* EMPTY / LOADING */
+    .empty-state {
+      padding: 4rem 2rem;
+      text-align: center;
+      color: var(--muted);
+    }
+    .empty-state svg { width: 40px; height: 40px; margin-bottom: 1rem; opacity: 0.35; }
+    .empty-state p { font-size: 14px; }
+
+    .loading { color: var(--muted); font-size: 14px; padding: 2rem; text-align: center; }
+
+    /* RESPONSIVE */
+    @media (max-width: 500px) {
+      nav { padding: 0.8rem 1rem; }
+      .home-header { padding: 2rem 1rem 1.5rem; }
+      .hero-panel { grid-template-columns: 1fr; }
+      .home-header h1 { font-size: 2.1rem; }
+      .hero-copy,
+      .hero-stats { padding: 1.2rem; }
+      .feature-strip { grid-template-columns: 1fr; }
+      .decks-grid { padding: 0 1rem 3rem; }
+      .deck-overview { padding: 1.5rem 1rem 3rem; }
+      .review-view { padding: 1.5rem 1rem 3rem; }
+      .card-content { font-size: 1.35rem; }
+      .review-buttons { gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#" onclick="navigate('home'); return false;">StudyCard</a>
+  <button class="nav-back" id="nav-back" onclick="goBack()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M19 12H5M5 12l7 7M5 12l7-7"/>
+    </svg>
+    Back
+  </button>
+</nav>
+
+<!-- HOME VIEW -->
+<div class="view active" id="view-home">
+  <div class="home-header">
+    <div class="hero-panel">
+      <section class="hero-copy">
+        <div class="hero-kicker">Programming Paradigms project</div>
+        <h1>Study cards that feel lighter, clearer, and ready for review.</h1>
+        <p id="home-subtitle">Loading…</p>
+        <div class="hero-actions">
+          <a class="btn-secondary primary" href="#decks-grid">See decks</a>
+          <a class="btn-secondary" href="#quick-notes">Quick notes</a>
+        </div>
+      </section>
+      <aside class="hero-stats">
+        <div class="hero-stat">
+          <span class="label">Focus</span>
+          <span class="value">SRS review flow</span>
+          <span class="desc">Decks, cards, and spaced repetition in one place.</span>
+        </div>
+        <div class="hero-stat">
+          <span class="label">Card support</span>
+          <span class="value">Text + image</span>
+          <span class="desc">Useful for recognition cards and visual prompts.</span>
+        </div>
+        <div class="hero-stat">
+          <span class="label">Frontend</span>
+          <span class="value">Plain HTML + JS</span>
+          <span class="desc">Easy to upload, easy to demo, easy to iterate.</span>
+        </div>
+      </aside>
+    </div>
+    <div class="feature-strip" id="quick-notes">
+      <article class="feature-card">
+        <div class="eyebrow">01 · Review</div>
+        <h3>Fast session start</h3>
+        <p>Open a deck, flip cards, and grade them with simple difficulty buttons.</p>
+      </article>
+      <article class="feature-card">
+        <div class="eyebrow">02 · Decks</div>
+        <h3>Organized content</h3>
+        <p>Keep flashcards grouped by subject so the teacher can understand the structure quickly.</p>
+      </article>
+      <article class="feature-card">
+        <div class="eyebrow">03 · Media</div>
+        <h3>Image-friendly design</h3>
+        <p>Support visual cards when a text-only prompt is not enough for recall or recognition.</p>
+      </article>
+    </div>
+  </div>
+  <div class="decks-grid" id="decks-grid">
+    <div class="loading">Loading decks…</div>
+  </div>
+</div>
+
+<!-- DECK OVERVIEW VIEW -->
+<div class="view" id="view-deck">
+  <div class="deck-overview">
+    <h2 id="deck-title">Deck</h2>
+    <p class="subtitle" id="deck-subtitle"></p>
+    <table class="cards-table">
+      <thead>
+        <tr>
+          <th>Front</th>
+          <th>Back</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Next review</th>
+        </tr>
+      </thead>
+      <tbody id="cards-tbody"></tbody>
+    </table>
+    <div class="start-session-bar" id="start-session-bar">
+      <p><strong id="due-count">0</strong> cards due for review</p>
+      <button class="btn-primary" id="start-review-btn">Start review →</button>
+    </div>
+  </div>
+</div>
+
+<!-- REVIEW VIEW -->
+<div class="view" id="view-review">
+  <div class="review-view">
+    <div class="review-topbar">
+      <span class="review-deck-name" id="review-deck-name"></span>
+      <span class="review-counter"><span id="cards-remaining">0</span> remaining</span>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+
+    <!-- Flip card -->
+    <div class="flip-scene" id="flip-scene" onclick="flipCard()">
+      <div class="flip-card" id="flip-card">
+        <div class="card-face card-face-front">
+          <span class="card-type-badge" id="card-type-label">Review</span>
+          <div class="card-label">Front</div>
+          <div class="card-content" id="card-front-text"></div>
+          <div class="card-hint">Click to reveal answer</div>
+        </div>
+        <div class="card-face card-face-back">
+          <div class="card-label">Answer</div>
+          <div class="card-content" id="card-back-text"></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="review-actions-prompt" id="flip-prompt">Click the card to reveal</p>
+
+    <div class="review-buttons hidden" id="review-buttons">
+      <button class="rating-btn btn-miss" onclick="rate('MISS')">
+        Miss
+        <span class="key-hint">key: 1</span>
+      </button>
+      <button class="rating-btn btn-hard" onclick="rate('HARD')">
+        Hard
+        <span class="key-hint">key: 2</span>
+      </button>
+      <button class="rating-btn btn-easy" onclick="rate('EASY')">
+        Easy
+        <span class="key-hint">key: 3</span>
+      </button>
+    </div>
+
+    <!-- Done screen (initially hidden inside review view) -->
+    <div class="done-screen" id="done-screen" style="display:none;">
+      <div class="checkmark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M5 13l4 4L19 7"/>
+        </svg>
+      </div>
+      <h2>Session complete</h2>
+      <p id="done-subtitle">Great work!</p>
+      <div class="done-stats">
+        <div class="done-stat">
+          <div class="val val-miss" id="done-miss">0</div>
+          <div class="lbl">Missed</div>
+        </div>
+        <div class="done-stat">
+          <div class="val val-hard" id="done-hard">0</div>
+          <div class="lbl">Hard</div>
+        </div>
+        <div class="done-stat">
+          <div class="val val-easy" id="done-easy">0</div>
+          <div class="lbl">Easy</div>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="navigate('home')">Back to decks</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* =====================================================
+     STATE
+     ===================================================== */
+  let currentDeckId = null;
+  let reviewQueue   = [];
+  let currentIndex  = 0;
+  let totalCards    = 0;
+  let flipped       = false;
+  let sessionStats  = { miss: 0, hard: 0, easy: 0 };
+  let history       = ['home'];
+
+  /* =====================================================
+     ROUTING
+     ===================================================== */
+  function navigate(view, deckId) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-' + view).classList.add('active');
+
+    const backBtn = document.getElementById('nav-back');
+    backBtn.style.display = view === 'home' ? 'none' : 'flex';
+
+    if (view === 'home')   loadHome();
+    if (view === 'deck')  { currentDeckId = deckId; loadDeck(deckId); }
+    if (view === 'review'){ startReview(deckId); }
+
+    history.push(view);
+    window.scrollTo(0, 0);
+  }
+
+  function goBack() {
+    history.pop();
+    const prev = history[history.length - 1] || 'home';
+    if (prev === 'home')  navigate('home');
+    else if (prev === 'deck') navigate('deck', currentDeckId);
+  }
+
+  /* =====================================================
+     API HELPERS
+     ===================================================== */
+  async function apiFetch(path, options = {}) {
+    const res = await fetch('/api' + path, {
+      headers: { 'Content-Type': 'application/json' },
+      ...options
+    });
+    if (!res.ok) throw new Error('API error ' + res.status);
+    return res.json();
+  }
+
+  /* =====================================================
+     HOME — load decks
+     ===================================================== */
+  async function loadHome() {
+    const grid = document.getElementById('decks-grid');
+    grid.innerHTML = '<div class="loading">Loading…</div>';
+
+    try {
+      const decks = await apiFetch('/decks');
+
+      const totalDue = decks.reduce((sum, d) => sum + (d.dueCount || 0), 0);
+      document.getElementById('home-subtitle').textContent =
+        totalDue > 0
+          ? `${totalDue} card${totalDue !== 1 ? 's' : ''} waiting for review`
+          : 'All caught up — nothing to review right now.';
+
+      if (decks.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="5" width="18" height="14" rx="2"/>
+              <path d="M3 9h18"/>
+            </svg>
+            <p>No decks yet. Create one to get started.</p>
+          </div>`;
+        return;
+      }
+
+      grid.innerHTML = decks.map(deck => {
+        const due   = deck.dueCount   || 0;
+        const total = deck.cards ? deck.cards.length : (deck.cardCount || 0);
+        return `
+          <div class="deck-card" onclick="navigate('deck', ${deck.id})">
+            <div class="deck-name">${escHtml(deck.name || 'Deck ' + deck.id)}</div>
+            <div class="deck-stats">
+              <span class="stat-pill due">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+                </svg>
+                ${due} due
+              </span>
+              <span class="stat-pill total">${total} total</span>
+            </div>
+            <button class="deck-review-btn" ${due === 0 ? 'disabled' : ''}
+              onclick="event.stopPropagation(); navigate('review', ${deck.id})">
+              ${due > 0 ? 'Review now →' : 'Nothing due'}
+            </button>
+          </div>`;
+      }).join('');
+    } catch (e) {
+      grid.innerHTML = renderError('Could not load decks. Is the server running?');
+    }
+  }
+
+  /* =====================================================
+     DECK OVERVIEW
+     ===================================================== */
+  async function loadDeck(deckId) {
+    document.getElementById('deck-title').textContent = 'Loading…';
+    document.getElementById('cards-tbody').innerHTML = '<tr><td colspan="5" class="loading">Loading…</td></tr>';
+
+    try {
+      const deck = await apiFetch('/decks/' + deckId);
+      const cards = deck.cards || [];
+
+      document.getElementById('deck-title').textContent = deck.name || 'Deck ' + deckId;
+      document.getElementById('deck-subtitle').textContent =
+        `${cards.length} card${cards.length !== 1 ? 's' : ''} · daily limit: ${deck.dailyReviewLimit}`;
+
+      const dueCards = cards.filter(c => isDue(c));
+      document.getElementById('due-count').textContent = dueCards.length;
+
+      const startBtn = document.getElementById('start-review-btn');
+      startBtn.disabled = dueCards.length === 0;
+      startBtn.textContent = dueCards.length > 0 ? 'Start review →' : 'Nothing due';
+      startBtn.onclick = () => navigate('review', deckId);
+
+      document.getElementById('cards-tbody').innerHTML = cards.length === 0
+        ? '<tr><td colspan="5" class="empty-state" style="padding:2rem;color:var(--muted);text-align:center;">No cards in this deck.</td></tr>'
+        : cards.map(card => `
+          <tr>
+            <td class="col-front">${escHtml(card.front)}</td>
+            <td class="col-back">${escHtml(card.back)}</td>
+            <td>${typeBadge(card.cardType)}</td>
+            <td>${statusBadge(card.status)}</td>
+            <td style="color:var(--muted);font-size:12px;">${formatDate(card.nextReview)}</td>
+          </tr>`).join('');
+    } catch (e) {
+      document.getElementById('deck-title').textContent = 'Error';
+      document.getElementById('cards-tbody').innerHTML =
+        `<tr><td colspan="5">${renderError('Could not load deck.')}</td></tr>`;
+    }
+  }
+
+  /* =====================================================
+     REVIEW SESSION
+     ===================================================== */
+  async function startReview(deckId) {
+    currentDeckId = deckId;
+    sessionStats  = { miss: 0, hard: 0, easy: 0 };
+
+    document.getElementById('done-screen').style.display   = 'none';
+    document.getElementById('flip-scene').style.display    = '';
+    document.getElementById('review-buttons').style.display = '';
+    document.getElementById('flip-prompt').style.display   = '';
+    document.getElementById('review-topbar').style.display  = '';
+    document.getElementById('progress-fill').parentElement.style.display = '';
+
+    try {
+      const deck = await apiFetch('/decks/' + deckId + '/review');
+      reviewQueue  = deck.cards || deck;
+      totalCards   = reviewQueue.length;
+      currentIndex = 0;
+
+      document.getElementById('review-deck-name').textContent = deck.name || 'Review';
+
+      if (totalCards === 0) {
+        showDoneScreen();
+        return;
+      }
+      showCurrentCard();
+    } catch (e) {
+      document.getElementById('review-deck-name').textContent = 'Error loading session';
+    }
+  }
+
+  function showCurrentCard() {
+    if (currentIndex >= reviewQueue.length) {
+      showDoneScreen();
+      return;
+    }
+
+    const card = reviewQueue[currentIndex];
+    flipped    = false;
+
+    document.getElementById('flip-card').classList.remove('flipped');
+    document.getElementById('card-front-text').textContent = card.front;
+    document.getElementById('card-back-text').textContent  = card.back;
+    document.getElementById('card-type-label').textContent =
+      card.cardType === 'RECOGNITION' ? 'Recognition' : 'Review';
+
+    const remaining = reviewQueue.length - currentIndex;
+    document.getElementById('cards-remaining').textContent = remaining;
+
+    const progress = Math.round((currentIndex / totalCards) * 100);
+    document.getElementById('progress-fill').style.width = progress + '%';
+
+    document.getElementById('review-buttons').classList.add('hidden');
+    document.getElementById('flip-prompt').textContent = 'Click the card to reveal answer';
+  }
+
+  function flipCard() {
+    if (flipped) return;
+    flipped = true;
+    document.getElementById('flip-card').classList.add('flipped');
+    document.getElementById('review-buttons').classList.remove('hidden');
+    document.getElementById('flip-prompt').textContent = 'How did it go?';
+  }
+
+  async function rate(rating) {
+    if (!flipped) return;
+    const card = reviewQueue[currentIndex];
+    sessionStats[rating.toLowerCase()]++;
+
+    try {
+      await apiFetch('/cards/' + card.id + '/review', {
+        method: 'POST',
+        body: JSON.stringify({ rating })
+      });
+    } catch (_) { /* proceed anyway */ }
+
+    currentIndex++;
+    showCurrentCard();
+  }
+
+  function showDoneScreen() {
+    document.getElementById('flip-scene').style.display    = 'none';
+    document.getElementById('review-buttons').style.display = 'none';
+    document.getElementById('flip-prompt').style.display   = 'none';
+    document.getElementById('review-topbar').style.display  = 'none';
+    document.getElementById('progress-fill').parentElement.style.display = 'none';
+
+    document.getElementById('done-miss').textContent = sessionStats.miss;
+    document.getElementById('done-hard').textContent = sessionStats.hard;
+    document.getElementById('done-easy').textContent = sessionStats.easy;
+    document.getElementById('done-subtitle').textContent =
+      totalCards === 0 ? 'Nothing due in this deck.' :
+      `You reviewed ${totalCards} card${totalCards !== 1 ? 's' : ''}.`;
+
+    document.getElementById('done-screen').style.display = '';
+    document.getElementById('progress-fill').style.width = '100%';
+  }
+
+  /* =====================================================
+     KEYBOARD SHORTCUTS
+     ===================================================== */
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('view-review').classList.contains('active')) return;
+    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flipCard(); }
+    if (e.key === '1') rate('MISS');
+    if (e.key === '2') rate('HARD');
+    if (e.key === '3') rate('EASY');
+  });
+
+  /* =====================================================
+     HELPERS
+     ===================================================== */
+  function isDue(card) {
+    if (!card.nextReview) return card.status !== 'SUSPENDED';
+    return new Date(card.nextReview) <= new Date();
+  }
+
+  function formatDate(dateStr) {
+    if (!dateStr) return '—';
+    const d = new Date(dateStr);
+    if (isNaN(d)) return dateStr;
+    const today = new Date();
+    const diff  = Math.ceil((d - today) / 86400000);
+    if (diff < 0)  return 'Overdue';
+    if (diff === 0) return 'Today';
+    if (diff === 1) return 'Tomorrow';
+    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  }
+
+  function statusBadge(s) {
+    const map = {
+      NEW:       ['badge-new',     'New'],
+      REVIEW:    ['badge-review',  'Review'],
+      SUSPENDED: ['badge-suspend', 'Suspended'],
+    };
+    const [cls, label] = map[s] || map.NEW;
+    return `<span class="badge ${cls}">${label}</span>`;
+  }
+
+  function typeBadge(t) {
+    return t === 'RECOGNITION'
+      ? `<span class="badge badge-recog">Recognition</span>`
+      : `<span class="badge badge-revtype">Review</span>`;
+  }
+
+  function escHtml(str) {
+    return String(str)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function renderError(msg) {
+    return `<div style="color:var(--rose);font-size:13px;padding:1rem 0;">${escHtml(msg)}</div>`;
+  }
+
+  /* =====================================================
+     BOOT
+     ===================================================== */
+  document.getElementById('nav-back').style.display = 'none';
+  loadHome();
+</script>
+</body>
+</html>

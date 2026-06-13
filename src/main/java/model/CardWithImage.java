@@ -1,4 +1,4 @@
-package studycard;
+package model;
 
 import java.awt.image.BufferedImage;
 
@@ -15,6 +15,7 @@ public class CardWithImage extends Card {
 		if(this.type == CardType.RECALL) {
 			// return this.image; descobrir como fazer isso
 		}
+		return this.front;
 	}
 	
 }

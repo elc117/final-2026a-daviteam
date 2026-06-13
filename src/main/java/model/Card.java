@@ -1,4 +1,4 @@
-package studycard;
+package model;
 
 import java.time.LocalDate;
 
@@ -11,12 +11,12 @@ public class Card {
 	protected int score;
 	protected LocalDate nextReview;
 	
-	enum CardType{
+	public enum CardType{
 		RECALL,
 		RECOGNITION
 	}
 	
-	enum CardStatus{
+	public enum CardStatus{
 		NEW,
 		REVIEW,
 		SUSPENDED
