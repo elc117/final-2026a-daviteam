@@ -10,5 +10,11 @@ public class CardWithImage extends Card {
 		this.image = image;
 	}
 
+	@Override
+	public String getFront() {
+		if(this.type == CardType.RECALL) {
+			// return this.image; descobrir como fazer isso
+		}
+	}
 	
 }

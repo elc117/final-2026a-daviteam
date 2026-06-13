@@ -1,15 +1,25 @@
 package studycard;
 
+import java.time.LocalDate;
+
 public class Card {
-	private final int id;
-	private String front;
-	private String back;
-	private CardType type;
-	private int score;
+	protected final int id;
+	protected String front;
+	protected String back;
+	protected CardType type;
+	protected CardStatus status;
+	protected int score;
+	protected LocalDate nextReview;
 	
 	enum CardType{
 		RECALL,
 		RECOGNITION
+	}
+	
+	enum CardStatus{
+		NEW,
+		REVIEW,
+		SUSPENDED
 	}
 	
 	public Card(String front,String back,CardType type) {
@@ -17,7 +27,13 @@ public class Card {
 		this.front = front;
 		this.back = back;
 		this.score = 50;
+		this.nextReview = LocalDate.now();
 		this.type = type;
+	}
+	
+	@Override
+	public String toString() {
+		return "['"+this.front+"';'"+this.back+"']";
 	}
 	
 	public String getFront() {
