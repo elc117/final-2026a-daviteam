@@ -6,7 +6,10 @@ import java.util.Optional;
 public class Deck {
 	public final long id;
 	private ArrayList<Card> cards;
+	private int dailyNewCardLimit = 10;
 	private int dailyReviewLimit = 30;
+	private int newCardsToday = 0;
+	private int reviewedToday = 0;
 
 	public Deck() {
 		this.id = 0; // mudar depois
@@ -27,6 +30,10 @@ public class Deck {
 		}
 	}
 	
+	public void changeNewCardLimit(int limit) {
+		this.dailyNewCardLimit = limit;
+	}
+	
 	public void changeReviewLimit(int limit) {
 		this.dailyReviewLimit = limit;
 	}
@@ -39,7 +46,31 @@ public class Deck {
 		return this.cards;
 	}
 	
+	public int getNewCardLimit() {
+		return this.dailyNewCardLimit;
+	}
+	
+	public int getReviewLimit() {
+		return this.dailyReviewLimit;
+	}
+	
+	public int getNewCardsToday() {
+		return newCardsToday;
+	}
+
+	public void incrementNewCard() {
+		this.newCardsToday++;
+	}
+
+	public int getReviewedToday() {
+		return reviewedToday;
+	}
+
+	public void incrementReviewed() {
+		this.reviewedToday++;
+	}
+	
 	public ReviewQueue startReview() {
-		return new ReviewQueue(this,this.dailyReviewLimit);
+		return new ReviewQueue(this);
 	}
 }

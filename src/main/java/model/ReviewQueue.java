@@ -1,7 +1,15 @@
 package model;
 
+import java.util.ArrayList;
+
+import service.ReviewQueueService;
+
 public class ReviewQueue {
-	public ReviewQueue(Deck deck,int reviewLimit) {
-		
+	private ArrayList<Card> cards;
+	
+	public ReviewQueue(Deck deck) {
+		this.cards = ReviewQueueService.buildQueue(deck);
 	}
+	
+	
 }

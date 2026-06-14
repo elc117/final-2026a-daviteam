@@ -3,8 +3,22 @@
 **Curso:** Sistemas de Informação
 
 # Proposta
+Desenvolvimento de um software de flashcards que segue os princípios de um SRS (Spaced Repetition System), que se baseia em repetição de conceitos em intervalos específicos para melhor fixação do aprendizado. O funcionamento básico é:
+
+- O usuário cria/baixa um Deck de cartas sobre um tópico que deseja aprender. Ex: Língua Inglesa
+- Esse baralho irá apresentar ao usuário X cartas novas e Y cartas que ele já viu, todos os dias.
+- Em uma carta de revisão, o usuário terá que ler o enunciado da carta, e tentar lembrar do que está no fundo da carta. Ex: Apple -> Maçã
+- Dependendo da facilidade que o usuário sentiu em lembrar corretamente, ele vai marcar o resultado dessa revisão como "Erro", "Difícil" ou "Fácil".
+- Baseado nesse resultado, o sistema irá determinar uma data para que essa carta apareça novamente. Se o resultado foi "Erro", vai aparecer novamente em breve. Se foi fácil, vai voltar daqui a alguns dias ou semanas.
+
 
 # Processo de desenvolvimento
+Comecei fazendo apenas as classes comuns de Java, Card, Deck, ReviewQueue, com construtores getters e setters e alguns enums para propriedades mais específicas. Essa parte não teve complicações.
+
+Depois, pensando no futuro, comecei a pesquisar sobre maneiras de manter persistência que preserva as relações dos objetos corretamente, e fui vendo sobre design patterns como Repository e DAO, mas ainda não implementei.
+
+Com essa ideia de futuramente fazer os repositories, comecei as rotas do Javalin e segui implementando a fila de revisão, dando uma olhada sobre JPA (Jakarta Persistence API) para conseguir ordenar as cartas de um baralho por data como faria em um banco de dados. Porém, após pesquisar sobre essa API e ver que daria um overhead desnecessariamente grande para um projeto do escopo do meu, falei com o claude sobre alternativas e decidi usar JDBI, que apesar de ser um pouco mais "feio" (usa queries SQL diretamente), faz bem o trabalho que preciso.
+
 
 # Diagrama de classes
 
@@ -17,6 +31,11 @@
 -- Artigos que li buscando entender como conciliar a relação entre as classes de OOP e a persistência que preciso pro sistema de flashcards (esses dados devem durar meses/anos e não apenas o tempo de uma sessão http)  
 https://www.baeldung.com/java-dao-pattern
 https://medium.com/@pererikbergman/repository-design-pattern-e28c0f3e4a30
+https://java-design-patterns.com/patterns/repository/#detailed-explanation-of-repository-pattern-with-real-world-examples
+https://docs.oracle.com/javaee/7/api/javax/persistence/EntityManager.html
+https://www.dio.me/articles/jakarta-persistence-api-jpa
+https://jdbi.org/
+https://jdbi.org/#_statement_types
 
 -- Documentação do javalin para entender o funcionamento das rotas e como ligar uma rota a um arquivo html
 https://javalin.io/documentation#getting-started
