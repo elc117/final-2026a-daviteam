@@ -1,21 +1,37 @@
 package model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Optional;
 
 public class Deck {
-	public final long id;
-	private ArrayList<Card> cards;
+	private long id;
+	private String name;
+	private ArrayList<Card> cards = new ArrayList<>();
 	private int dailyNewCardLimit = 10;
 	private int dailyReviewLimit = 30;
 	private int newCardsToday = 0;
 	private int reviewedToday = 0;
 
 	public Deck() {
-		this.id = 0; // mudar depois
-		this.cards = new ArrayList<>();
+		
 	}
 	
+	public Deck(String name) {
+		this.name = name;
+	}
+	
+	public Deck(long id, String name, int dailyNew, int dailyReview, int newToday, int reviewToday, LocalDate data) {
+		this.id = id;
+		this.name = name;
+		this.dailyNewCardLimit = dailyNew;
+		this.dailyReviewLimit = dailyReview;
+		if(data.isEqual(LocalDate.now())) {			
+			this.newCardsToday = newToday;
+			this.reviewedToday = reviewToday;
+		}
+	}
+
 	public void add(Card card) {
 		this.cards.add(card);
 	}

@@ -1,0 +1,26 @@
+services:
+  app:
+    image: mcr.microsoft.com/devcontainers/java:1-21-bookworm
+    volumes:
+      - ..:/workspaces/studycard:cached
+    command: sleep infinity
+    depends_on:
+      db:
+        condition: service_started
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/studycard
+      DB_USER: studycard
+      DB_PASS: studycard
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: studycard
+      POSTGRES_USER: studycard
+      POSTGRES_PASSWORD: studycard
+    volumes:
+      - studycard-db-data:/var/lib/postgresql/data
+
+volumes:
+  studycard-db-data:

@@ -1,0 +1,21 @@
+{
+  "name": "studycard",
+  "dockerComposeFile": [
+    "docker-compose.yml"
+  ],
+  "service": "app",
+  "workspaceFolder": "/workspaces/studycard",
+  "forwardPorts": [
+    3000,
+    5432
+  ],
+  "postCreateCommand": "mvn dependency:go-offline",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "redhat.java",
+        "vscjava.vscode-maven"
+      ]
+    }
+  }
+}
