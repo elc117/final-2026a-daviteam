@@ -46,7 +46,7 @@ class DeckRepositoryTest {
 
 	@BeforeEach
 	void setup() {
-		repository = new DeckRepository();
+		repository = new DeckRepository(jdbi);
 		setField(repository, "jdbi", jdbi);
 
 		jdbi.useHandle(handle -> handle.createUpdate("DELETE FROM decks").execute());

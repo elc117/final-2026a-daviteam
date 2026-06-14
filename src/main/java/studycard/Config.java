@@ -7,9 +7,9 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 public class Config {
-	private final Jdbi jdbi;
+	private static Jdbi jdbi;
 	
-	public Config() {
+	public static void create() {
 		HikariConfig config = new HikariConfig();
         config.setJdbcUrl(System.getenv("DB_URL"));
         config.setUsername(System.getenv("DB_USER"));
@@ -17,11 +17,11 @@ public class Config {
 
         HikariDataSource dataSource = new HikariDataSource(config);
 
-        this.jdbi = Jdbi.create(dataSource);
-        this.jdbi.installPlugin(new SqlObjectPlugin());
+        jdbi = Jdbi.create(dataSource);
+        jdbi.installPlugin(new SqlObjectPlugin());
 	}
 	
-	public Jdbi getJdbi() {
+	public static Jdbi getJdbi() {
 		return jdbi;
 	}
 }

@@ -12,10 +12,6 @@ public class Deck {
 	private int dailyReviewLimit = 30;
 	private int newCardsToday = 0;
 	private int reviewedToday = 0;
-
-	public Deck() {
-		
-	}
 	
 	public Deck(String name) {
 		this.name = name;
@@ -53,6 +49,14 @@ public class Deck {
 	public void changeReviewLimit(int limit) {
 		this.dailyReviewLimit = limit;
 	}
+
+	public Long getId() {
+		return this.id;
+	}
+	
+	public String getName() {
+		return this.name;
+	}
 	
 	public Optional<Card> getCard(int index) {
 		return Optional.ofNullable(this.cards.get(index));
@@ -89,4 +93,5 @@ public class Deck {
 	public ReviewQueue startReview() {
 		return new ReviewQueue(this);
 	}
+	
 }

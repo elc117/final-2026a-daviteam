@@ -1,43 +1,71 @@
 package repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 
+import model.Card;
 import model.Deck;
 import repository.mapper.DeckMapper;
 
 public class DeckRepository implements Repository<Deck,Long>{
 	private Jdbi jdbi;
 	
+	public DeckRepository(Jdbi conn) {
+		this.jdbi = conn;
+	}
+	
 	@Override
-	public Deck save(Deck obj) {
-		
-		return null;
+	public Deck save(Deck deck) {
+		return jdbi.withHandle(handle -> {
+			return handle.createQuery("""
+			    INSERT INTO decks (name, daily_new_limit, daily_review_limit, new_today, review_today, last_session_date)
+			    VALUES (:name, :dailyNewLimit, :dailyReviewLimit, :newToday, :reviewToday, :lastSessionDate)
+			    RETURNING *
+			""")
+			.bind("name", deck.getName())
+			.bind("dailyNewLimit", deck.getNewCardLimit())
+			.bind("dailyReviewLimit", deck.getReviewLimit())
+			.bind("newToday", deck.getNewCardsToday())
+	     	.bind("reviewToday", deck.getReviewedToday())
+	     	.bind("lastSessionDate", LocalDate.now())
+	     	.map(new DeckMapper())
+	     	.one();
+		});
 	}
 
 	@Override
 	public Optional<Deck> findById(Long id) {
-		return jdbi.withHandle(handle->{
-			Optional<Deck> deck = handle.createQuery("SELECT * from decks where id = :id")
+		Optional<Deck> deck = jdbi.withHandle(handle->{
+			Optional<Deck> d = handle.createQuery("SELECT * from decks where id = :id")
 					.bind("id",id)
 					.map(new DeckMapper())
 					.findFirst();
 			
-			return deck;
+			return d;
 		});
+		if(deck.isPresent()) {
+			List<Card> cards = CardRepository.findByDeck(id);
+			deck.get().getAllCards().addAll(cards);
+		}
+		return deck;
 	}
 
 	@Override
 	public List<Deck> findAll() {
-		return jdbi.withHandle(handle->{
-			List<Deck> decks = handle.createQuery("SELECT * from decks")
+		List<Deck> decks = jdbi.withHandle(handle->{
+			List<Deck> d = handle.createQuery("SELECT * from decks")
 					.map(new DeckMapper())
 					.list();
-			return decks;
+			return d;
 		});
+		decks.forEach(deck->{
+			List<Card> cards = CardRepository.findByDeck(deck.getId());
+			deck.getAllCards().addAll(cards);
+		});
+		return decks;
 	}
 
 	@Override
