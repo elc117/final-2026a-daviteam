@@ -8,6 +8,6 @@ RUN mvn package -DskipTests
 # Run stage
 FROM eclipse-temurin:21-jre
 WORKDIR /app
-COPY --from=build /app/target/*-shaded.jar app.jar
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 7070
 CMD ["java", "-jar", "app.jar"]
