@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.jdbi.v3.core.Jdbi;
 
 import model.Card;
+import repository.mapper.CardMapper;
 
 public class CardRepository implements Repository<Card, Long> {
 	private final Jdbi jdbi;
@@ -39,25 +40,33 @@ public class CardRepository implements Repository<Card, Long> {
 
 	@Override
 	public Optional<Card> findById(Long id) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+		return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM cards WHERE id = :id")
+			.bind("id", id)
+			.map(new CardMapper())
+			.findFirst());
 	}
 
 	@Override
 	public List<Card> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM cards")
+			.map(new CardMapper())
+			.list());
 	}
 
 	@Override
 	public void deleteById(Long id) {
-		// TODO Auto-generated method stub
-		
+		jdbi.withHandle(handle -> {
+			return handle.createUpdate("DELETE FROM cards WHERE id = :id")
+				.bind("id", id)
+				.execute();
+		});
 	}
 
-	public static List<Card> findByDeck(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Card> findByDeck(Long id) {
+		return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM cards WHERE deck_id = :id")
+			.bind("id", id)
+			.map(new CardMapper())
+			.list());
 	}
 	
 }

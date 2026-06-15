@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Memoris</title>
+  <title>StudyCard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -56,6 +56,31 @@
       text-decoration: none;
       letter-spacing: -0.02em;
     }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-left: auto;
+    }
+    .nav-button {
+      border: 1px solid rgba(126,184,164,0.3);
+      border-radius: 999px;
+      padding: 0.55rem 0.95rem;
+      background: var(--sage-dim);
+      color: var(--sage);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.12s, filter 0.12s, background 0.12s;
+    }
+    .nav-button.secondary {
+      background: rgba(255,255,255,0.02);
+      color: var(--text);
+      border-color: var(--border);
+    }
+    .nav-button:hover { transform: translateY(-1px); filter: brightness(1.08); }
     .nav-back {
       display: none;
       align-items: center;
@@ -78,146 +103,31 @@
     .view.active { display: block; }
 
     /* ── HOME ── */
-    .home-header {
-      padding: 3.5rem 2rem 2rem;
+    .home-shell {
       max-width: 860px;
       margin: 0 auto;
+      padding: 2rem 2rem 4rem;
     }
-    .hero-panel {
-      display: grid;
-      grid-template-columns: 1.4fr 0.9fr;
-      gap: 18px;
-      align-items: stretch;
-      margin-bottom: 1.5rem;
+    .home-title {
+      margin-bottom: 1.25rem;
     }
-    .hero-copy,
-    .hero-stats {
-      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 1.6rem;
-    }
-    .hero-kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--sage);
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-bottom: 0.85rem;
-    }
-    .hero-kicker::before {
-      content: '';
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: var(--sage);
-      box-shadow: 0 0 0 4px rgba(126,184,164,0.12);
-    }
-    .home-header h1 {
+    .home-title h1 {
       font-family: 'DM Serif Display', serif;
-      font-size: 2.7rem;
+      font-size: 2.2rem;
       font-weight: 400;
       letter-spacing: -0.03em;
       line-height: 1.05;
-      margin-bottom: 0.8rem;
+      margin-bottom: 0.35rem;
     }
-    .home-header p {
+    .home-title p {
       color: var(--muted);
       font-size: 14px;
-      max-width: 58ch;
     }
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 1.2rem;
-    }
-    .btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 10px 14px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.02);
-      color: var(--text);
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 600;
-      transition: border-color 0.15s, transform 0.1s, background 0.15s;
-    }
-    .btn-secondary:hover { border-color: rgba(126,184,164,0.35); background: rgba(126,184,164,0.08); transform: translateY(-1px); }
-    .btn-secondary.primary {
-      background: var(--sage-dim);
-      color: var(--sage);
-      border-color: rgba(126,184,164,0.25);
-    }
-    .hero-stats {
-      display: grid;
-      gap: 12px;
-      align-content: start;
-    }
-    .hero-stat {
-      padding: 0.95rem 1rem;
-      border-radius: 14px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
-    }
-    .hero-stat .label {
-      display: block;
+    .empty-state {
+      padding: 2rem 0;
+      text-align: center;
       color: var(--muted);
-      font-size: 12px;
-      margin-bottom: 0.2rem;
     }
-    .hero-stat .value {
-      display: block;
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.2rem;
-      letter-spacing: -0.01em;
-    }
-    .hero-stat .desc {
-      display: block;
-      margin-top: 0.2rem;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .feature-strip {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-      margin: 1rem 0 0;
-    }
-    .feature-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 1rem 1rem 1.05rem;
-    }
-    .feature-card .eyebrow {
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-bottom: 0.45rem;
-    }
-    .feature-card h3 {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.1rem;
-      font-weight: 400;
-      margin-bottom: 0.3rem;
-    }
-    .feature-card p {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.45;
-    }
-
     .decks-grid {
       max-width: 860px;
       margin: 0 auto;
@@ -372,7 +282,143 @@
       cursor: pointer;
       transition: filter 0.15s, transform 0.1s;
     }
+    .btn-secondary {
+      background: rgba(255,255,255,0.02);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 16px;
+      cursor: pointer;
+    }
     .btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(5,10,20,0.72);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 200;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-card {
+      width: min(100%, 560px);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.45);
+      padding: 1.25rem;
+    }
+    .modal-header {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 1rem;
+    }
+    .modal-header h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.6rem;
+      font-weight: 400;
+      line-height: 1;
+    }
+    .modal-close {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 1.4rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .modal-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .tab-button {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 0.5rem 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .tab-button.active {
+      background: var(--sage-dim);
+      color: var(--sage);
+      border-color: rgba(126,184,164,0.3);
+    }
+    .modal-form {
+      display: grid;
+      gap: 12px;
+    }
+    .modal-form.hidden { display: none; }
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+    .field label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 0.85rem 0.95rem;
+      font: inherit;
+      outline: none;
+    }
+    .field textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: rgba(126,184,164,0.5);
+    }
+    .form-grid {
+      display: grid;
+      gap: 12px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .modal-error {
+      color: var(--rose);
+      font-size: 13px;
+      min-height: 1.2em;
+    }
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 0.25rem;
+      flex-wrap: wrap;
+    }
+    .helper-text {
+      font-size: 12px;
+      color: var(--muted);
+    }
 
     /* ── REVIEW ── */
     .review-view {
@@ -559,17 +605,15 @@
     /* RESPONSIVE */
     @media (max-width: 500px) {
       nav { padding: 0.8rem 1rem; }
-      .home-header { padding: 2rem 1rem 1.5rem; }
-      .hero-panel { grid-template-columns: 1fr; }
-      .home-header h1 { font-size: 2.1rem; }
-      .hero-copy,
-      .hero-stats { padding: 1.2rem; }
-      .feature-strip { grid-template-columns: 1fr; }
+      .nav-actions { width: 100%; justify-content: flex-end; }
+      .home-shell { padding: 1.5rem 1rem 3rem; }
+      .home-title h1 { font-size: 1.9rem; }
       .decks-grid { padding: 0 1rem 3rem; }
       .deck-overview { padding: 1.5rem 1rem 3rem; }
       .review-view { padding: 1.5rem 1rem 3rem; }
       .card-content { font-size: 1.35rem; }
       .review-buttons { gap: 8px; }
+      .form-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -577,6 +621,10 @@
 
 <nav>
   <a class="nav-logo" href="#" onclick="navigate('home'); return false;">StudyCard</a>
+  <div class="nav-actions">
+    <button class="nav-button secondary" type="button" onclick="openModal('deck')">New deck</button>
+    <button class="nav-button" type="button" onclick="openModal('card')">New card</button>
+  </div>
   <button class="nav-back" id="nav-back" onclick="goBack()">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M19 12H5M5 12l7 7M5 12l7-7"/>
@@ -587,55 +635,14 @@
 
 <!-- HOME VIEW -->
 <div class="view active" id="view-home">
-  <div class="home-header">
-    <div class="hero-panel">
-      <section class="hero-copy">
-        <div class="hero-kicker">Programming Paradigms project</div>
-        <h1>Study cards that feel lighter, clearer, and ready for review.</h1>
-        <p id="home-subtitle">Loading…</p>
-        <div class="hero-actions">
-          <a class="btn-secondary primary" href="#decks-grid">See decks</a>
-          <a class="btn-secondary" href="#quick-notes">Quick notes</a>
-        </div>
-      </section>
-      <aside class="hero-stats">
-        <div class="hero-stat">
-          <span class="label">Focus</span>
-          <span class="value">SRS review flow</span>
-          <span class="desc">Decks, cards, and spaced repetition in one place.</span>
-        </div>
-        <div class="hero-stat">
-          <span class="label">Card support</span>
-          <span class="value">Text + image</span>
-          <span class="desc">Useful for recognition cards and visual prompts.</span>
-        </div>
-        <div class="hero-stat">
-          <span class="label">Frontend</span>
-          <span class="value">Plain HTML + JS</span>
-          <span class="desc">Easy to upload, easy to demo, easy to iterate.</span>
-        </div>
-      </aside>
+  <div class="home-shell">
+    <div class="home-title">
+      <h1>Decks</h1>
+      <p id="home-subtitle">Loading…</p>
     </div>
-    <div class="feature-strip" id="quick-notes">
-      <article class="feature-card">
-        <div class="eyebrow">01 · Review</div>
-        <h3>Fast session start</h3>
-        <p>Open a deck, flip cards, and grade them with simple difficulty buttons.</p>
-      </article>
-      <article class="feature-card">
-        <div class="eyebrow">02 · Decks</div>
-        <h3>Organized content</h3>
-        <p>Keep flashcards grouped by subject so the teacher can understand the structure quickly.</p>
-      </article>
-      <article class="feature-card">
-        <div class="eyebrow">03 · Media</div>
-        <h3>Image-friendly design</h3>
-        <p>Support visual cards when a text-only prompt is not enough for recall or recognition.</p>
-      </article>
+    <div class="decks-grid" id="decks-grid">
+      <div class="loading">Loading decks…</div>
     </div>
-  </div>
-  <div class="decks-grid" id="decks-grid">
-    <div class="loading">Loading decks…</div>
   </div>
 </div>
 
@@ -670,6 +677,7 @@
       <span class="review-deck-name" id="review-deck-name"></span>
       <span class="review-counter"><span id="cards-remaining">0</span> remaining</span>
     </div>
+
     <div class="progress-bar-wrap">
       <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
     </div>
@@ -735,6 +743,64 @@
   </div>
 </div>
 
+
+<!-- FORM MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-header">
+      <div>
+        <h2 id="modal-title">New deck</h2>
+        <p class="helper-text" id="modal-subtitle">Create a new deck or a new card.</p>
+      </div>
+      <button class="modal-close" type="button" onclick="closeModal()">×</button>
+    </div>
+
+    <div class="modal-tabs">
+      <button class="tab-button active" type="button" id="deck-tab" onclick="switchModal('deck')">Deck</button>
+      <button class="tab-button" type="button" id="card-tab" onclick="switchModal('card')">Card</button>
+    </div>
+
+    <p class="modal-error" id="modal-error"></p>
+
+    <form class="modal-form" id="deck-form">
+      <div class="field">
+        <label for="deck-name">Deck name</label>
+        <input id="deck-name" name="name" type="text" required maxlength="60" placeholder="e.g. Programming Paradigms" />
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" type="button" onclick="closeModal()">Cancel</button>
+        <button class="btn-primary" type="submit">Create deck</button>
+      </div>
+    </form>
+
+    <form class="modal-form hidden" id="card-form">
+      <div class="field">
+        <label for="card-deck-id">Deck</label>
+        <select id="card-deck-id" name="deckId" required></select>
+      </div>
+      <div class="field">
+        <label for="card-type">Type</label>
+        <select id="card-type" name="type" required>
+          <option value="RECALL">Recall</option>
+          <option value="RECOGNITION">Recognition</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="card-front">Front</label>
+        <textarea id="card-front" name="front" required placeholder="Question or prompt"></textarea>
+      </div>
+      <div class="field">
+        <label for="card-back">Back</label>
+        <textarea id="card-back" name="back" required placeholder="Answer or explanation"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" type="button" onclick="closeModal()">Cancel</button>
+        <button class="btn-primary" type="submit">Create card</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script>
   /* =====================================================
      STATE
@@ -746,6 +812,8 @@
   let flipped       = false;
   let sessionStats  = { miss: 0, hard: 0, easy: 0 };
   let history       = ['home'];
+  let cachedDecks   = [];
+  let modalMode     = 'deck';
 
   /* =====================================================
      ROUTING
@@ -772,11 +840,66 @@
     else if (prev === 'deck') navigate('deck', currentDeckId);
   }
 
+  function openModal(mode) {
+    if ((mode || 'deck') === 'card' && (!cachedDecks || cachedDecks.length === 0)) {
+      mode = 'deck';
+    }
+    switchModal(mode || 'deck');
+    populateDeckSelect();
+    document.getElementById('modal-error').textContent =
+      (mode === 'card' && (!cachedDecks || cachedDecks.length === 0))
+        ? 'Create a deck first.'
+        : '';
+    document.getElementById('modal-overlay').classList.add('active');
+    document.getElementById(modalMode === 'deck' ? 'deck-name' : 'card-front').focus();
+  }
+
+  function closeModal(event) {
+    if (event && event.target !== event.currentTarget) return;
+    document.getElementById('modal-overlay').classList.remove('active');
+  }
+
+  function switchModal(mode) {
+    modalMode = mode === 'card' ? 'card' : 'deck';
+    document.getElementById('modal-title').textContent = modalMode === 'card' ? 'New card' : 'New deck';
+    document.getElementById('modal-subtitle').textContent =
+      modalMode === 'card'
+        ? 'Add a new flashcard to a deck.'
+        : 'Create a new deck for your flashcards.';
+    document.getElementById('deck-form').classList.toggle('hidden', modalMode !== 'deck');
+    document.getElementById('card-form').classList.toggle('hidden', modalMode !== 'card');
+    document.getElementById('deck-tab').classList.toggle('active', modalMode === 'deck');
+    document.getElementById('card-tab').classList.toggle('active', modalMode === 'card');
+  }
+
+  function populateDeckSelect() {
+    const select = document.getElementById('card-deck-id');
+    const decks = cachedDecks || [];
+    const fallback = currentDeckId || (decks[0] && decks[0].id) || '';
+
+    select.innerHTML = decks.length === 0
+      ? '<option value="">No decks available</option>'
+      : decks.map(deck => `<option value="${deck.id}">${escHtml(deck.name || 'Deck ' + deck.id)}</option>`).join('');
+
+    select.disabled = decks.length === 0;
+    if (fallback) select.value = String(fallback);
+  }
+
+  async function postForm(path, data) {
+    const res = await fetch(API_BASE + '/api' + path, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+      body: new URLSearchParams(data).toString()
+    });
+    if (!res.ok) throw new Error('API error ' + res.status);
+    return res.json();
+  }
+
   /* =====================================================
      API HELPERS
      ===================================================== */
   async function apiFetch(path, options = {}) {
-    const res = await fetch('/api' + path, {
+    const res = await fetch(API_BASE + '/api' + path, {
       headers: { 'Content-Type': 'application/json' },
       ...options
     });
@@ -793,6 +916,8 @@
 
     try {
       const decks = await apiFetch('/decks');
+      cachedDecks = decks;
+      populateDeckSelect();
 
       const totalDue = decks.reduce((sum, d) => sum + (d.dueCount || 0), 0);
       document.getElementById('home-subtitle').textContent =
@@ -803,18 +928,15 @@
       if (decks.length === 0) {
         grid.innerHTML = `
           <div class="empty-state">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <rect x="3" y="5" width="18" height="14" rx="2"/>
-              <path d="M3 9h18"/>
-            </svg>
             <p>No decks yet. Create one to get started.</p>
           </div>`;
         return;
       }
 
       grid.innerHTML = decks.map(deck => {
-        const due   = deck.dueCount   || 0;
-        const total = deck.cards ? deck.cards.length : (deck.cardCount || 0);
+        const cards = deck.cards || deck.allCards || [];
+        const due   = deck.dueCount   || cards.filter(isDue).length;
+        const total = cards.length || deck.cardCount || 0;
         return `
           <div class="deck-card" onclick="navigate('deck', ${deck.id})">
             <div class="deck-name">${escHtml(deck.name || 'Deck ' + deck.id)}</div>
@@ -838,6 +960,45 @@
     }
   }
 
+  document.getElementById('deck-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const error = document.getElementById('modal-error');
+    error.textContent = '';
+    try {
+      await postForm('/decks', {
+        name: document.getElementById('deck-name').value.trim()
+      });
+      e.target.reset();
+      closeModal();
+      await loadHome();
+    } catch (err) {
+      error.textContent = 'Could not create deck.';
+    }
+  });
+
+  document.getElementById('card-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const error = document.getElementById('modal-error');
+    error.textContent = '';
+    try {
+      const deckId = document.getElementById('card-deck-id').value;
+      await postForm('/cards', {
+        deckId: deckId,
+        front: document.getElementById('card-front').value.trim(),
+        back: document.getElementById('card-back').value.trim(),
+        type: document.getElementById('card-type').value
+      });
+      e.target.reset();
+      closeModal();
+      await loadHome();
+      if (currentDeckId && String(currentDeckId) === String(deckId)) {
+        await loadDeck(currentDeckId);
+      }
+    } catch (err) {
+      error.textContent = 'Could not create card.';
+    }
+  });
+
   /* =====================================================
      DECK OVERVIEW
      ===================================================== */
@@ -847,7 +1008,7 @@
 
     try {
       const deck = await apiFetch('/decks/' + deckId);
-      const cards = deck.cards || [];
+      const cards = deck.cards || deck.allCards || [];;
 
       document.getElementById('deck-title').textContent = deck.name || 'Deck ' + deckId;
       document.getElementById('deck-subtitle').textContent =
@@ -867,7 +1028,7 @@
           <tr>
             <td class="col-front">${escHtml(card.front)}</td>
             <td class="col-back">${escHtml(card.back)}</td>
-            <td>${typeBadge(card.cardType)}</td>
+            <td>${typeBadge(card.type)}</td>
             <td>${statusBadge(card.status)}</td>
             <td style="color:var(--muted);font-size:12px;">${formatDate(card.nextReview)}</td>
           </tr>`).join('');
@@ -923,7 +1084,7 @@
     document.getElementById('card-front-text').textContent = card.front;
     document.getElementById('card-back-text').textContent  = card.back;
     document.getElementById('card-type-label').textContent =
-      card.cardType === 'RECOGNITION' ? 'Recognition' : 'Review';
+      card.type === 'RECOGNITION' ? 'Recognition' : 'Review';
 
     const remaining = reviewQueue.length - currentIndex;
     document.getElementById('cards-remaining').textContent = remaining;
@@ -1037,6 +1198,7 @@
   /* =====================================================
      BOOT
      ===================================================== */
+  const API_BASE = (window.API_BASE_URL || '').replace(/\/$/, '');
   document.getElementById('nav-back').style.display = 'none';
   loadHome();
 </script>

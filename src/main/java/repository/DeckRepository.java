@@ -12,9 +12,11 @@ import repository.mapper.DeckMapper;
 
 public class DeckRepository implements Repository<Deck,Long>{
 	private Jdbi jdbi;
+	private CardRepository cardrepo;
 	
 	public DeckRepository(Jdbi conn) {
 		this.jdbi = conn;
+		this.cardrepo = new CardRepository(conn);
 	}
 	
 	@Override
@@ -47,7 +49,7 @@ public class DeckRepository implements Repository<Deck,Long>{
 			return d;
 		});
 		if(deck.isPresent()) {
-			List<Card> cards = CardRepository.findByDeck(id);
+			List<Card> cards = cardrepo.findByDeck(id);
 			deck.get().getAllCards().addAll(cards);
 		}
 		return deck;
@@ -62,7 +64,7 @@ public class DeckRepository implements Repository<Deck,Long>{
 			return d;
 		});
 		decks.forEach(deck->{
-			List<Card> cards = CardRepository.findByDeck(deck.getId());
+			List<Card> cards = cardrepo.findByDeck(deck.getId());
 			deck.getAllCards().addAll(cards);
 		});
 		return decks;

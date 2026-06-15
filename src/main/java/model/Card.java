@@ -3,7 +3,7 @@ package model;
 import java.time.LocalDate;
 
 public class Card {
-	protected final int id;
+	protected long id;
 	protected Long deckId;
 	protected String front;
 	protected String back;
@@ -32,6 +32,28 @@ public class Card {
 		this.status = CardStatus.NEW;
 		this.type = type;
 	}
+
+	public Card(Long id, Long deckId, String front, String back, CardType type, CardStatus status, int score, LocalDate nextReview) {
+		this.id = id;
+		this.deckId = deckId;
+		this.front = front;
+		this.back = back;
+		this.type = type;
+		this.status = status;
+		this.score = score;
+		this.nextReview = nextReview;
+	}
+
+	public Card(Long id, Card c) {
+		this.id = id;
+		this.deckId = c.getDeckId();
+		this.front = c.getFront();
+		this.back = c.getBack();
+		this.score = c.getScore();
+		this.nextReview = c.getNextReview();
+		this.status = c.getStatus();
+		this.type = c.getType();
+	}
 	
 	@Override
 	public String toString() {
@@ -44,6 +66,10 @@ public class Card {
 	
 	public String getBack() {
 		return back;
+	}
+
+	public long getId() {
+		return id;
 	}
 
 	public Long getDeckId() {

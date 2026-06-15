@@ -5,10 +5,15 @@ import java.awt.image.BufferedImage;
 public class CardWithImage extends Card {
 	private BufferedImage image;
 
-	public CardWithImage(String front, String back, CardType type, BufferedImage image) {
-		super(front, back, type);
-		this.image = image;
+	public CardWithImage(Long deckId, String front, String back, CardType type) {
+		super(deckId, front, back, type);
+		// TODO Auto-generated constructor stub
 	}
+
+	//public CardWithImage(String front, String back, CardType type, BufferedImage image) {
+		//super(front, back, type);
+	//	this.image = image;
+	//}
 
 	@Override
 	public String getFront() {

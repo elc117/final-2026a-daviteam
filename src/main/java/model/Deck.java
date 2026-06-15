@@ -65,6 +65,10 @@ public class Deck {
 	public ArrayList<Card> getAllCards(){
 		return this.cards;
 	}
+
+	public ArrayList<Card> getCards() {
+		return this.cards;
+	}
 	
 	public int getNewCardLimit() {
 		return this.dailyNewCardLimit;
