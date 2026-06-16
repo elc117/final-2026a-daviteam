@@ -20,7 +20,8 @@ public class CardMapper implements RowMapper<Card> {
 			rs.getString("back"),
 			Card.CardType.valueOf(rs.getString("type")),
 			Card.CardStatus.valueOf(rs.getString("status")),
-			rs.getInt("score"),
+			rs.getInt("ease"),
+			rs.getInt("successful_reviews"),
 			rs.getObject("next_review", LocalDate.class)
 		);
 	}

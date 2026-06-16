@@ -9,7 +9,8 @@ public class Card {
 	protected String back;
 	protected CardType type;
 	protected CardStatus status;
-	protected int score;
+	protected int ease;
+	protected int successfulReviews;
 	protected LocalDate nextReview;
 	
 	public enum CardType{
@@ -27,20 +28,22 @@ public class Card {
 		this.deckId = deckId;
 		this.front = front;
 		this.back = back;
-		this.score = 50;
+		this.ease = 50;
 		this.nextReview = LocalDate.now();
 		this.status = CardStatus.NEW;
 		this.type = type;
+		this.successfulReviews = 0;
 	}
 
-	public Card(Long id, Long deckId, String front, String back, CardType type, CardStatus status, int score, LocalDate nextReview) {
+	public Card(Long id, Long deckId, String front, String back, CardType type, CardStatus status, int ease, int successfulReviews, LocalDate nextReview) {
 		this.id = id;
 		this.deckId = deckId;
 		this.front = front;
 		this.back = back;
 		this.type = type;
 		this.status = status;
-		this.score = score;
+		this.ease = ease;
+		this.successfulReviews = successfulReviews;
 		this.nextReview = nextReview;
 	}
 
@@ -49,7 +52,8 @@ public class Card {
 		this.deckId = c.getDeckId();
 		this.front = c.getFront();
 		this.back = c.getBack();
-		this.score = c.getScore();
+		this.ease = c.getEase();
+		this.successfulReviews = c.getSuccessfulReviews();
 		this.nextReview = c.getNextReview();
 		this.status = c.getStatus();
 		this.type = c.getType();
@@ -88,13 +92,23 @@ public class Card {
 		return status;
 	}
 
-	public int getScore() {
-		return score;
+	public int getEase() {
+		return ease;
+	}
+
+	public void setEase(int ease) {
+		this.ease = ease;
+	}
+
+	public int getSuccessfulReviews() {
+		return successfulReviews;
+	}
+
+	public void setSuccessfulReviews(int successfulReviews) {
+		this.successfulReviews = successfulReviews;
 	}
 
 	public LocalDate getNextReview() {
 		return nextReview;
 	}
-	
-	
 }

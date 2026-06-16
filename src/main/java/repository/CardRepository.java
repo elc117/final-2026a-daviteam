@@ -23,15 +23,16 @@ public class CardRepository implements Repository<Card, Long> {
 
 		return jdbi.withHandle(handle -> {
 			handle.createUpdate("""
-			    INSERT INTO cards (deck_id, front, back, type, status, score, next_review)
-			    VALUES (:deckId, :front, :back, :type, :status, :score, :nextReview)
+			    INSERT INTO cards (deck_id, front, back, type, status, ease, successful_reviews, next_review)
+			    VALUES (:deckId, :front, :back, :type, :status, :ease, :successfulReviews, :nextReview)
 			""")
 			.bind("deckId", card.getDeckId())
 			.bind("front", card.getFront())
 			.bind("back", card.getBack())
 			.bind("type", card.getType().name())
 			.bind("status", card.getStatus().name())
-			.bind("score", card.getScore())
+			.bind("ease", card.getEase())
+			.bind("successfulReviews", card.getSuccessfulReviews())
 			.bind("nextReview", card.getNextReview())
 			.execute();
 			return card;
