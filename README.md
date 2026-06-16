@@ -19,6 +19,13 @@ Depois, pensando no futuro, comecei a pesquisar sobre maneiras de manter persist
 
 Com essa ideia de futuramente fazer os repositories, comecei as rotas do Javalin e segui implementando a fila de revisão, dando uma olhada sobre JPA (Jakarta Persistence API) para conseguir ordenar as cartas de um baralho por data como faria em um banco de dados. Porém, após pesquisar sobre essa API e ver que daria um overhead desnecessariamente grande para um projeto do escopo do meu, falei com o claude sobre alternativas e decidi usar JDBI, que apesar de ser um pouco mais "feio" (usa queries SQL diretamente), faz bem o trabalho que preciso.
 
+Depois de instalar as dependências do JDBI, criei um banco de dados PostgreSQL no Render e já fiz a integração por meio de variáveis de ambiente para execução local enquanto o backend ainda não funcionava completamente.
+
+Após, fui completando os repositories que lidam com a entrada e saída dos objetos no banco de dados. Primeiro completei o repositório de Decks, e depois o de cartas.
+Enquanto implementava os repositories, busquei um modo de fazer a conversão entre a saída de uma query ao DB (uma Row) para o objeto correspondente, e o Claude me recomendou olhar sobre a biblioteca RowMapper, e eu então implementei as funções DeckMapper e CardMapper, ambas extendem RowMapper.
+
+Depois disso, comecei a fazer os endpoints com Javalin no arquivo RoutesService para busca dos decks e cartas, criação e remoção, etc.
+Então fui atrás de adicionar um Dockerfile para execução no Render e realizar o deploy para entrega parcial.
 
 # Diagrama de classes
 
