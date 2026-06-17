@@ -1,6 +1,8 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.ListIterator;
+import java.util.Optional;
 
 import service.ReviewQueueService;
 
@@ -10,6 +12,5 @@ public class ReviewQueue {
 	public ReviewQueue(Deck deck) {
 		this.cards = ReviewQueueService.buildQueue(deck);
 	}
-	
 	
 }
