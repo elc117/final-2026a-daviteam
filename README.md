@@ -31,6 +31,12 @@ Enquanto implementava os repositories, busquei um modo de fazer a conversão ent
 Depois disso, comecei a fazer os endpoints com Javalin no arquivo RoutesService para busca dos decks e cartas, criação e remoção, etc.
 Então fui atrás de adicionar um Dockerfile para execução no Render e realizar o deploy para entrega parcial.
 
+A próxima etapa da implementação é implementar o funcionamento principal do software, o review e avaliação das cartas.
+
+Comecei tentando fazer um modelo chamado ReviewQueue, mas depois decidi que seria mais fácil apenas fazer um ReviewQueueService que constrói uma fila, baseado nas propriedades de dailyLimit e reviewedToday, e retornando essa fila no formato de uma ArrayList\<Cards> ordenada por data, e o percurso de uma carta para outra será feito direto no roteamento e no front-end, para evitar acessos desnecessários ao DB ou requisições HTTP extras.
+
+Tive uma certa dificuldade ao fazer o roteamento para lidar com os repositórios que fazem o acesso ao DB, pois inicialmente eu havia feito as funções do repository estáticas, porém elas precisam de uma instância de JDBI (conexão ao banco), então tive que remover a keyword static e adicionar os repositorios já instanciados como parâmetros para o RouterService.init(), instanciando esses repositórios na função Main que inicia o backend.
+
 # Diagrama de classes
 
 # Instruções para execução
@@ -67,6 +73,13 @@ The Classes are currently:
 
 The data will be fetched from the backend through javalin routes, make only the page templates.
 ```
+
+-- Artigo que li para entender mais sobre o algoritmo de SRS (spaced repetition)
+https://dev.to/umangsinha12/how-spaced-repetition-actually-works-the-sm-2-algorithm-1ge3
+
+-- Documentação da Mozilla sobre códigos HTTP para resposta às requisições
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status
+
 
 
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/8MfjtJ-y)

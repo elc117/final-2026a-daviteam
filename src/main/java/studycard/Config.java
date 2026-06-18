@@ -14,6 +14,11 @@ public class Config {
         config.setJdbcUrl(System.getenv("DB_URL"));
         config.setUsername(System.getenv("DB_USER"));
         config.setPassword(System.getenv("DB_PASS"));
+        
+        config.setConnectionTimeout(30000);
+        config.setKeepaliveTime(30000);
+        config.setMaxLifetime(1800000);
+        config.setIdleTimeout(600000);
 
         HikariDataSource dataSource = new HikariDataSource(config);
 

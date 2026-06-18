@@ -717,7 +717,7 @@
 <!-- REVIEW VIEW -->
 <div class="view" id="view-review">
   <div class="review-view">
-    <div class="review-topbar">
+    <div class="review-topbar" id="review-topbar">
       <span class="review-deck-name" id="review-deck-name"></span>
       <span class="review-counter"><span id="cards-remaining">0</span> remaining</span>
     </div>
@@ -1136,7 +1136,7 @@
     document.getElementById('card-front-text').textContent = card.front;
     document.getElementById('card-back-text').textContent  = card.back;
     document.getElementById('card-type-label').textContent =
-      card.type === 'RECOGNITION' ? 'Recognition' : 'Review';
+      card.type === 'RECOGNITION' ? 'Recognition' : 'Review';	
 
     const remaining = reviewQueue.length - currentIndex;
     document.getElementById('cards-remaining').textContent = remaining;

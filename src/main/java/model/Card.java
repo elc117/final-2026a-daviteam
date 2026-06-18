@@ -24,6 +24,12 @@ public class Card {
 		SUSPENDED
 	}
 	
+	public enum Rating{
+		MISS,
+		HARD,
+		EASY
+	}
+	
 	public Card(Long deckId,String front,String back,CardType type) {
 		this.deckId = deckId;
 		this.front = front;

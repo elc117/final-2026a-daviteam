@@ -1,3 +1,3 @@
 package dto;
 
-public record ReviewRequest(int rating) { }
+public record ReviewRequest(String rating) { }

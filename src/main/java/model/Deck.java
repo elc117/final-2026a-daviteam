@@ -12,19 +12,23 @@ public class Deck {
 	private int dailyReviewLimit = 30;
 	private int newCardsToday = 0;
 	private int reviewedToday = 0;
+	private LocalDate lastSession = LocalDate.now();
 	
 	public Deck(String name) {
 		this.name = name;
 	}
 	
-	public Deck(long id, String name, int dailyNew, int dailyReview, int newToday, int reviewToday, LocalDate data) {
+	public Deck(long id, String name, int dailyNew, int dailyReview, int newToday, int reviewToday, LocalDate date) {
 		this.id = id;
 		this.name = name;
 		this.dailyNewCardLimit = dailyNew;
 		this.dailyReviewLimit = dailyReview;
-		if(data.isEqual(LocalDate.now())) {			
-			this.newCardsToday = newToday;
-			this.reviewedToday = reviewToday;
+		if(date != null) {
+			this.lastSession = date;
+			if(date.isEqual(LocalDate.now())) {			
+				this.newCardsToday = newToday;
+				this.reviewedToday = reviewToday;
+			}
 		}
 	}
 
@@ -79,23 +83,27 @@ public class Deck {
 	}
 	
 	public int getNewCardsToday() {
+		if(!this.lastSession.isEqual(LocalDate.now())) {
+			this.newCardsToday = 0;
+		}
 		return newCardsToday;
 	}
 
 	public void incrementNewCard() {
 		this.newCardsToday++;
+		this.lastSession = LocalDate.now();
 	}
 
 	public int getReviewedToday() {
+		if(!this.lastSession.isEqual(LocalDate.now())) {
+			this.reviewedToday = 0;
+		}
 		return reviewedToday;
 	}
 
 	public void incrementReviewed() {
 		this.reviewedToday++;
-	}
-	
-	public ReviewQueue startReview() {
-		return new ReviewQueue(this);
+		this.lastSession = LocalDate.now();
 	}
 	
 }

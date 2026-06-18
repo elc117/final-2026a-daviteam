@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.jdbi.v3.core.Jdbi;
 
 import model.Card;
+import model.Card.CardStatus;
 import repository.mapper.CardMapper;
 
 public class CardRepository implements Repository<Card, Long> {
@@ -68,6 +69,21 @@ public class CardRepository implements Repository<Card, Long> {
 			.bind("id", id)
 			.map(new CardMapper())
 			.list());
+	}
+
+	public List<Card> getCardsByLatest(Long deckId) {
+		return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM cards WHERE deck_id = :id ORDER BY next_review")
+				.bind("id", deckId)
+				.map(new CardMapper())
+				.list());
+	}
+	
+	public List<Card> getCardsByLatest(Long deckId, CardStatus status) {
+		return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM cards WHERE deck_id = :id AND status = :status ORDER BY next_review")
+				.bind("id", deckId)
+				.bind("status",status.name())
+				.map(new CardMapper())
+				.list());
 	}
 	
 }

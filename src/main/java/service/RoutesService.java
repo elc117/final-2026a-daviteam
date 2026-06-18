@@ -9,11 +9,11 @@ import repository.CardRepository;
 import repository.DeckRepository;
 import model.Card;
 import model.Card.CardType;
+import model.Card.Rating;
 import model.Deck;
-import model.ReviewQueue;
 
 public class RoutesService {
-	public static void init(Javalin app,DeckRepository deckrepo,CardRepository cardrepo) {
+	public static void init(Javalin app,DeckRepository deckrepo,CardRepository cardrepo,ReviewQueueService revQueueService) {
 		// DECKS
 		// getters
 		app.get("/api/decks/{id}", ctx->{
@@ -59,16 +59,6 @@ public class RoutesService {
 			ctx.status(201).json(saved);
 		});
 		
-		// review
-		app.post("/api/cards/{id}/review", ctx->{
-			ReviewRequest body = ctx.bodyAsClass(ReviewRequest.class);
-			int rating = body.rating();
-			Optional<Card> c = cardrepo.findById(Long.parseLong(ctx.pathParam("id")));
-			if(c.isPresent()) {
-				CardService.review(c.get(),rating);
-			}
-		});
-		
 		// delete
 		app.post("/api/cards/delete/{id}", ctx -> {
 			long id = ctx.pathParamAsClass("id", Long.class).get();
@@ -83,10 +73,26 @@ public class RoutesService {
 		
 		
 		// REVIEW QUEUES
-		app.post("/review/start", ctx->{
-			long deckId = Long.parseLong(ctx.formParam("deck"));
+		// cria fila
+		app.get("/api/decks/{id}/review", ctx->{
+			long deckId = ctx.pathParamAsClass("id", Long.class).get();
 			Deck deck = deckrepo.findById(deckId).get();
-			ReviewQueue queue = new ReviewQueue(deck);
+			List<Card> queue = revQueueService.buildQueue(deck);
+			ctx.json(queue);
+		});
+		
+		// review card
+		app.post("/api/cards/{id}/review", ctx->{
+			ReviewRequest body = ctx.bodyAsClass(ReviewRequest.class);
+			Rating rating = Rating.valueOf(body.rating());
+			
+			Optional<Card> c = cardrepo.findById(Long.parseLong(ctx.pathParam("id")));
+			if(c.isPresent()) {
+				CardService.review(c.get(),rating);
+				ctx.status(200);
+			}else {
+				ctx.status(204);
+			}
 		});
 	}
 }
