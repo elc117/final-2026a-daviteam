@@ -1195,6 +1195,7 @@
      ===================================================== */
   document.addEventListener('keydown', e => {
     if (!document.getElementById('view-review').classList.contains('active')) return;
+    if (document.getElementById('modal-overlay').classList.contains('active')) return;
     if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flipCard(); }
     if (e.key === '1') rate('MISS');
     if (e.key === '2') rate('HARD');
