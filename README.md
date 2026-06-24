@@ -37,9 +37,24 @@ Comecei tentando fazer um modelo chamado ReviewQueue, mas depois decidi que seri
 
 Tive uma certa dificuldade ao fazer o roteamento para lidar com os repositórios que fazem o acesso ao DB, pois inicialmente eu havia feito as funções do repository estáticas, porém elas precisam de uma instância de JDBI (conexão ao banco), então tive que remover a keyword static e adicionar os repositorios já instanciados como parâmetros para o RouterService.init(), instanciando esses repositórios na função Main que inicia o backend.
 
+Após isso, comecei a trabalhar no arquivo CardService, que lida com a lógica do review das cartas. Para essa lógica, precisei fazer algumas mudanças ao esquema do banco de dados, para contabilizar algumas novas variáveis necessárias no cálculo do algoritmo SM-2 de repetição espaçada, que são o intervalo da ultima review e o número de successful reviews. O algoritmo normalmente leva em conta 6 níveis de avaliação, mas para simplicidade eu optei por usar apenas 3, Miss, Hard e Easy. Ao marcar uma carta como Miss, o sistema reseta o progresso de reviews bem sucedidas e agenda essa carta para aparecer novamente amanhã. No caso do Hard e Easy, ao depender do número de sucessos, a carta pode receber um intervalo de 3 dias, 5 dias, e após 3 sucessos esse tempo vai crescendo incrementalmente, com base em uma variável chamada "ease" que aumenta gradativamente conforme o usuário clica em Easy, e diminui levemente quando clica em Hard, mantendo o intervalo justo. Nessa etapa, pedi ajuda ao Claude para saber um valor justo para o aumento ou decréscimo do Ease de acordo com a dificuldade escolhida, visto que os valores padrão do algoritmo SM-2 são balanceados para 6 ratings e não 3.
+
+Depois, por conta de conversas que tive com o colega Alberto, decidi por mudar o meu arquivo /service/RouterService para /controller/Router, pois não fazia muito sentido semântico as rotas estarem na pasta de serviço, e eu não havia percebido esse problema ainda.
+
+Por final, adicionei alguns métodos para fazer o update do texto da frente e verso das cartas, e o nome e limite de reviews diárias dos decks, além das rotas que lidam com os reviews, atualizando o limite do deck e os fatores de ease, interval e successful_reviews das cartas.
+
 # Diagrama de classes
 
 # Instruções para execução
+Como no outro projeto, esse também depende de banco de dados e precisa de chaves de API que eu não posso commitar, porém a execução é feita por dois comandos no PowerShell:
+```
+mvn clean package -DskipTests
+java -Dfile.encoding=UTF-8 -jar target/studycard-0.0.1-SNAPSHOT.jar
+```
+Em deploy local sem as variáveis de ambiente, provavelmente vai dar erro.
+O site está em deploy remoto no link abaixo:
+https://studycard-zeqj.onrender.com/
+
 
 # Resultado final
 
