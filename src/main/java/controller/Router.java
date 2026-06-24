@@ -81,6 +81,23 @@ public class Router {
 			Card saved = cardrepo.save(card);
 			ctx.status(201).json(saved);
 		});
+		app.post("/api/cards/{id}", ctx->{
+			long id = Long.parseLong(ctx.pathParam("id"));
+			Card card = cardrepo.findById(id).orElseThrow(()->new RuntimeException("Card not found"));
+			
+			String front = ctx.formParam("front");
+			String back = ctx.formParam("back");
+			
+			if(front != null && !front.isBlank()) {
+				card.setFront(front);
+			}
+			if(back != null && !back.isBlank()) {
+				card.setBack(back);
+			}
+			
+			cardrepo.update(card);
+			ctx.status(200).json(card);
+		});
 		
 		// delete
 		app.post("/api/cards/delete/{id}", ctx -> {

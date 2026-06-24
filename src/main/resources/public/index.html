@@ -178,7 +178,8 @@
       padding: 3px 10px;
       border-radius: 20px;
     }
-    .stat-pill.due   { background: var(--amber-dim); color: var(--amber); }
+    .stat-pill.new-due   { background: var(--sky-dim); color: var(--sky); }
+    .stat-pill.rev-due   { background: var(--amber-dim); color: var(--amber); }
     .stat-pill.total { background: rgba(255,255,255,0.06); color: var(--muted); }
     .stat-pill svg   { width: 12px; height: 12px; }
 
@@ -602,6 +603,10 @@
 
     .loading { color: var(--muted); font-size: 14px; padding: 2rem; text-align: center; }
 
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
     /* RESPONSIVE */
     @media (max-width: 500px) {
       nav { padding: 0.8rem 1rem; }
@@ -641,6 +646,23 @@
     .btn-delete:hover {
       background: rgba(220, 53, 69, 0.25);
       border-color: #ff6b6b;
+    }
+    .btn-table-edit {
+      background: rgba(126,184,164,0.08);
+      color: var(--sage);
+      border: 1px solid rgba(126,184,164,0.2);
+      border-radius: 6px;
+      padding: 4px 10px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      transition: background 0.15s, border-color 0.15s;
+      margin-right: 4px;
+    }
+    .btn-table-edit:hover {
+      background: rgba(126,184,164,0.2);
+      border-color: var(--sage);
     }
     .btn-table-delete {
       background: rgba(220, 53, 69, 0.08);
@@ -692,8 +714,15 @@
 <!-- DECK OVERVIEW VIEW -->
 <div class="view" id="view-deck">
   <div class="deck-overview">
-    <h2 id="deck-title">Deck</h2>
-    <p class="subtitle" id="deck-subtitle"></p>
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 10px;">
+      <h2 id="deck-title" style="margin-bottom: 0;">Deck</h2>
+      <button class="nav-button secondary" style="padding: 0.4rem 0.8rem; font-size: 12px;" onclick="openEditDeckModal()">Edit deck</button>
+    </div>
+    <p class="subtitle" id="deck-subtitle" style="margin-bottom: 1.5rem;"></p>
+    <div class="start-session-bar" id="start-session-bar" style="margin-top: 0; margin-bottom: 2rem;">
+      <p><strong id="due-count">0</strong> cards due for review</p>
+      <button class="btn-primary" id="start-review-btn">Start review →</button>
+    </div>
     <table class="cards-table">
       <thead>
         <tr>
@@ -707,22 +736,25 @@
       </thead>
       <tbody id="cards-tbody"></tbody>
     </table>
-    <div class="start-session-bar" id="start-session-bar">
-      <p><strong id="due-count">0</strong> cards due for review</p>
-      <button class="btn-primary" id="start-review-btn">Start review →</button>
-    </div>
   </div>
 </div>
 
 <!-- REVIEW VIEW -->
 <div class="view" id="view-review">
   <div class="review-view">
+    <!-- Loading screen inside review view -->
+    <div id="review-loading" class="loading" style="display:none; padding: 6rem 2rem; text-align: center;">
+      <div class="spinner" style="width: 40px; height: 40px; border: 3px solid rgba(126,184,164,0.1); border-top-color: var(--sage); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1.5rem;"></div>
+      <div style="font-size: 1.2rem; font-weight: 500; margin-bottom: 0.5rem; color: var(--text); font-family: 'DM Serif Display', serif; letter-spacing: -0.01em;">Loading Review Session</div>
+      <div style="color: var(--muted); font-size: 13px;">Retrieving cards from your deck...</div>
+    </div>
+
     <div class="review-topbar" id="review-topbar">
       <span class="review-deck-name" id="review-deck-name"></span>
       <span class="review-counter"><span id="cards-remaining">0</span> remaining</span>
     </div>
 
-    <div class="progress-bar-wrap">
+    <div class="progress-bar-wrap" id="review-progress-wrap">
       <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
     </div>
 
@@ -842,6 +874,42 @@
         <button class="btn-primary" type="submit">Create card</button>
       </div>
     </form>
+
+    <form class="modal-form hidden" id="edit-deck-form">
+      <div class="field">
+        <label for="edit-deck-name">Deck name</label>
+        <input id="edit-deck-name" name="name" type="text" required maxlength="60" />
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label for="edit-deck-new-limit">Daily new cards limit</label>
+          <input id="edit-deck-new-limit" name="newCardLimit" type="number" required min="1" max="500" />
+        </div>
+        <div class="field">
+          <label for="edit-deck-review-limit">Daily review limit</label>
+          <input id="edit-deck-review-limit" name="reviewLimit" type="number" required min="1" max="1000" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" type="button" onclick="closeModal()">Cancel</button>
+        <button class="btn-primary" type="submit">Save changes</button>
+      </div>
+    </form>
+
+    <form class="modal-form hidden" id="edit-card-form">
+      <div class="field">
+        <label for="edit-card-front">Front</label>
+        <textarea id="edit-card-front" name="front" required placeholder="Question or prompt"></textarea>
+      </div>
+      <div class="field">
+        <label for="edit-card-back">Back</label>
+        <textarea id="edit-card-back" name="back" required placeholder="Answer or explanation"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" type="button" onclick="closeModal()">Cancel</button>
+        <button class="btn-primary" type="submit">Save changes</button>
+      </div>
+    </form>
   </div>
 </div>
 
@@ -904,16 +972,40 @@
   }
 
   function switchModal(mode) {
-    modalMode = mode === 'card' ? 'card' : 'deck';
-    document.getElementById('modal-title').textContent = modalMode === 'card' ? 'New card' : 'New deck';
-    document.getElementById('modal-subtitle').textContent =
-      modalMode === 'card'
-        ? 'Add a new flashcard to a deck.'
-        : 'Create a new deck for your flashcards.';
-    document.getElementById('deck-form').classList.toggle('hidden', modalMode !== 'deck');
-    document.getElementById('card-form').classList.toggle('hidden', modalMode !== 'card');
-    document.getElementById('deck-tab').classList.toggle('active', modalMode === 'deck');
-    document.getElementById('card-tab').classList.toggle('active', modalMode === 'card');
+    modalMode = mode;
+    const tabs = document.querySelector('.modal-tabs');
+    
+    // Hide all forms initially
+    document.getElementById('deck-form').classList.add('hidden');
+    document.getElementById('card-form').classList.add('hidden');
+    document.getElementById('edit-deck-form').classList.add('hidden');
+    document.getElementById('edit-card-form').classList.add('hidden');
+    
+    if (mode === 'edit-deck') {
+      tabs.style.display = 'none';
+      document.getElementById('modal-title').textContent = 'Edit deck';
+      document.getElementById('modal-subtitle').textContent = 'Update deck name and daily study limits.';
+      document.getElementById('edit-deck-form').classList.remove('hidden');
+    } else if (mode === 'edit-card') {
+      tabs.style.display = 'none';
+      document.getElementById('modal-title').textContent = 'Edit card';
+      document.getElementById('modal-subtitle').textContent = 'Update front or back of the card.';
+      document.getElementById('edit-card-form').classList.remove('hidden');
+    } else {
+      tabs.style.display = 'flex';
+      
+      modalMode = mode === 'card' ? 'card' : 'deck';
+      document.getElementById('modal-title').textContent = modalMode === 'card' ? 'New card' : 'New deck';
+      document.getElementById('modal-subtitle').textContent =
+        modalMode === 'card'
+          ? 'Add a new flashcard to a deck.'
+          : 'Create a new deck for your flashcards.';
+      
+      document.getElementById('deck-form').classList.toggle('hidden', modalMode !== 'deck');
+      document.getElementById('card-form').classList.toggle('hidden', modalMode !== 'card');
+      document.getElementById('deck-tab').classList.toggle('active', modalMode === 'deck');
+      document.getElementById('card-tab').classList.toggle('active', modalMode === 'card');
+    }
   }
 
   function populateDeckSelect() {
@@ -948,7 +1040,8 @@
       ...options
     });
     if (!res.ok) throw new Error('API error ' + res.status);
-    return res.json();
+    const text = await res.text();
+    return text ? JSON.parse(text) : {};
   }
 
   /* =====================================================
@@ -963,10 +1056,18 @@
       cachedDecks = decks;
       populateDeckSelect();
 
-      const totalDue = decks.reduce((sum, d) => sum + (d.dueCount || 0), 0);
+      let totalNewDue = 0;
+      let totalRevDue = 0;
+      decks.forEach(d => {
+        const cards = d.cards || d.allCards || [];
+        totalNewDue += cards.filter(c => isDue(c) && c.status === 'NEW').length;
+        totalRevDue += cards.filter(c => isDue(c) && c.status === 'REVIEW').length;
+      });
+      const totalDue = totalNewDue + totalRevDue;
+      
       document.getElementById('home-subtitle').textContent =
         totalDue > 0
-          ? `${totalDue} card${totalDue !== 1 ? 's' : ''} waiting for review`
+          ? `${totalDue} card${totalDue !== 1 ? 's' : ''} waiting for review (${totalNewDue} new, ${totalRevDue} review)`
           : 'All caught up — nothing to review right now.';
 
       if (decks.length === 0) {
@@ -979,24 +1080,32 @@
 
       grid.innerHTML = decks.map(deck => {
         const cards = deck.cards || deck.allCards || [];
-        const due   = deck.dueCount   || cards.filter(isDue).length;
+        const newDue = cards.filter(c => isDue(c) && c.status === 'NEW').length;
+        const revDue = cards.filter(c => isDue(c) && c.status === 'REVIEW').length;
         const total = cards.length || deck.cardCount || 0;
+        const hasDue = newDue > 0 || revDue > 0;
         return `
           <div class="deck-card" onclick="navigate('deck', ${deck.id})">
             <div class="deck-name">${escHtml(deck.name || 'Deck ' + deck.id)}</div>
-            <div class="deck-stats">
-              <span class="stat-pill due">
+            <div class="deck-stats" style="flex-wrap: wrap;">
+              <span class="stat-pill new-due">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
+                </svg>
+                ${newDue} new
+              </span>
+              <span class="stat-pill rev-due">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
                 </svg>
-                ${due} due
+                ${revDue} review
               </span>
               <span class="stat-pill total">${total} total</span>
             </div>
             <div class="deck-actions">
-              <button class="deck-review-btn" ${due === 0 ? 'disabled' : ''}
+              <button class="deck-review-btn" ${!hasDue ? 'disabled' : ''}
                 onclick="event.stopPropagation(); navigate('review', ${deck.id})">
-                ${due > 0 ? 'Review now →' : 'Nothing due'}
+                ${hasDue ? 'Review now →' : 'Nothing due'}
               </button>
               <button class="btn-delete" onclick="event.stopPropagation(); deleteDeck(${deck.id})">
                 Delete
@@ -1048,6 +1157,81 @@
     }
   });
 
+  function openEditDeckModal() {
+    const deck = cachedDecks.find(d => d.id === currentDeckId);
+    if (!deck) return;
+    
+    // Populate edit fields
+    document.getElementById('edit-deck-name').value = deck.name || '';
+    document.getElementById('edit-deck-new-limit').value = deck.newCardLimit || deck.dailyNewCardLimit || 10;
+    document.getElementById('edit-deck-review-limit').value = deck.reviewLimit || deck.dailyReviewLimit || 30;
+    
+    // Configure modal appearance
+    switchModal('edit-deck');
+    document.getElementById('modal-overlay').classList.add('active');
+    document.getElementById('edit-deck-name').focus();
+  }
+
+  document.getElementById('edit-deck-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const error = document.getElementById('modal-error');
+    error.textContent = '';
+    try {
+      await postForm('/decks/' + currentDeckId, {
+        name: document.getElementById('edit-deck-name').value.trim(),
+        newCardLimit: document.getElementById('edit-deck-new-limit').value,
+        reviewLimit: document.getElementById('edit-deck-review-limit').value
+      });
+      closeModal();
+      await loadHome();
+      if (currentDeckId) {
+        await loadDeck(currentDeckId);
+      }
+    } catch (err) {
+      error.textContent = 'Could not update deck.';
+    }
+  });
+
+  let currentCardId = null;
+
+  function openEditCardModal(cardId, event) {
+    if (event) event.stopPropagation();
+    currentCardId = cardId;
+    
+    const deck = cachedDecks.find(d => d.id === currentDeckId);
+    if (!deck) return;
+    const cards = deck.cards || deck.allCards || [];
+    const card = cards.find(c => c.id === cardId);
+    if (!card) return;
+    
+    // Populate edit fields
+    document.getElementById('edit-card-front').value = card.front || '';
+    document.getElementById('edit-card-back').value = card.back || '';
+    
+    // Configure modal appearance
+    switchModal('edit-card');
+    document.getElementById('modal-overlay').classList.add('active');
+    document.getElementById('edit-card-front').focus();
+  }
+
+  document.getElementById('edit-card-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const error = document.getElementById('modal-error');
+    error.textContent = '';
+    try {
+      await postForm('/cards/' + currentCardId, {
+        front: document.getElementById('edit-card-front').value.trim(),
+        back: document.getElementById('edit-card-back').value.trim()
+      });
+      closeModal();
+      if (currentDeckId) {
+        await loadDeck(currentDeckId);
+      }
+    } catch (err) {
+      error.textContent = 'Could not update card.';
+    }
+  });
+
   /* =====================================================
      DECK OVERVIEW
      ===================================================== */
@@ -1057,11 +1241,20 @@
 
     try {
       const deck = await apiFetch('/decks/' + deckId);
+      
+      // Update cachedDecks with the latest deck data
+      const idx = cachedDecks.findIndex(d => d.id === deck.id);
+      if (idx !== -1) {
+        cachedDecks[idx] = deck;
+      } else {
+        cachedDecks.push(deck);
+      }
+
       const cards = deck.cards || deck.allCards || [];;
 
       document.getElementById('deck-title').textContent = deck.name || 'Deck ' + deckId;
       document.getElementById('deck-subtitle').textContent =
-        `${cards.length} card${cards.length !== 1 ? 's' : ''} · daily limit: ${deck.dailyReviewLimit}`;
+        `${cards.length} card${cards.length !== 1 ? 's' : ''} · daily limits: ${deck.newCardLimit || deck.dailyNewCardLimit || 10} new · ${deck.reviewLimit || deck.dailyReviewLimit || 30} review`;
 
       const dueCards = cards.filter(c => isDue(c));
       document.getElementById('due-count').textContent = dueCards.length;
@@ -1080,7 +1273,8 @@
             <td>${typeBadge(card.type)}</td>
             <td>${statusBadge(card.status)}</td>
             <td style="color:var(--muted);font-size:12px;">${formatDate(card.nextReview)}</td>
-            <td style="text-align: center;">
+            <td style="text-align: center; white-space: nowrap;">
+              <button class="btn-table-edit" onclick="openEditCardModal(${card.id}, event)">Edit</button>
               <button class="btn-table-delete" onclick="deleteCard(${card.id}, event)">Delete</button>
             </td>
           </tr>`).join('');
@@ -1098,12 +1292,22 @@
     currentDeckId = deckId;
     sessionStats  = { miss: 0, hard: 0, easy: 0 };
 
+    // Reset and show loading state
+    const loader = document.getElementById('review-loading');
+    loader.innerHTML = `
+      <div class="spinner" style="width: 40px; height: 40px; border: 3px solid rgba(126,184,164,0.1); border-top-color: var(--sage); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1.5rem;"></div>
+      <div style="font-size: 1.2rem; font-weight: 500; margin-bottom: 0.5rem; color: var(--text); font-family: 'DM Serif Display', serif; letter-spacing: -0.01em;">Loading Review Session</div>
+      <div style="color: var(--muted); font-size: 13px;">Retrieving cards from your deck...</div>
+    `;
+    loader.style.display = 'block';
+
+    // Hide review components initially
     document.getElementById('done-screen').style.display   = 'none';
-    document.getElementById('flip-scene').style.display    = '';
-    document.getElementById('review-buttons').style.display = '';
-    document.getElementById('flip-prompt').style.display   = '';
-    document.getElementById('review-topbar').style.display  = '';
-    document.getElementById('progress-fill').parentElement.style.display = '';
+    document.getElementById('flip-scene').style.display    = 'none';
+    document.getElementById('review-buttons').style.display = 'none';
+    document.getElementById('flip-prompt').style.display   = 'none';
+    document.getElementById('review-topbar').style.display  = 'none';
+    document.getElementById('review-progress-wrap').style.display = 'none';
 
     try {
       const deck = await apiFetch('/decks/' + deckId + '/review');
@@ -1113,13 +1317,30 @@
 
       document.getElementById('review-deck-name').textContent = deck.name || 'Review';
 
+      // Hide loading screen
+      loader.style.display = 'none';
+
       if (totalCards === 0) {
         showDoneScreen();
         return;
       }
+
+      // Show review components
+      document.getElementById('flip-scene').style.display    = '';
+      document.getElementById('flip-prompt').style.display   = '';
+      document.getElementById('review-topbar').style.display  = '';
+      document.getElementById('review-progress-wrap').style.display = '';
+      document.getElementById('review-buttons').style.display = '';
+
       showCurrentCard();
     } catch (e) {
-      document.getElementById('review-deck-name').textContent = 'Error loading session';
+      loader.innerHTML = `
+        <div style="color:var(--rose); font-size:14px; padding:1rem 0;">
+          <p style="font-weight:600; margin-bottom:0.5rem;">Could not load review session</p>
+          <p style="font-size:12px; color:var(--muted);">${e.message}</p>
+          <button class="btn-primary" style="margin-top:1.5rem; padding:8px 16px; font-size:13px;" onclick="navigate('home')">Back to decks</button>
+        </div>
+      `;
     }
   }
 
@@ -1156,17 +1377,18 @@
     document.getElementById('flip-prompt').textContent = 'How did it go?';
   }
 
-  async function rate(rating) {
+  function rate(rating) {
     if (!flipped) return;
     const card = reviewQueue[currentIndex];
     sessionStats[rating.toLowerCase()]++;
 
-    try {
-      await apiFetch('/cards/' + card.id + '/review', {
-        method: 'POST',
-        body: JSON.stringify({ rating })
-      });
-    } catch (_) { /* proceed anyway */ }
+    // Send update in the background (fire-and-forget) to keep card transitions instant
+    apiFetch('/cards/' + card.id + '/review', {
+      method: 'POST',
+      body: JSON.stringify({ rating })
+    }).catch(err => {
+      console.error("Error updating card review in background:", err);
+    });
 
     currentIndex++;
     showCurrentCard();

@@ -137,4 +137,12 @@ public class Card {
 	public void setLastInterval(int lastInterval) {
 		this.lastInterval = lastInterval;
 	}
+
+	public void setFront(String front) {
+		this.front = front;
+	}
+
+	public void setBack(String back) {
+		this.back = back;
+	}
 }
