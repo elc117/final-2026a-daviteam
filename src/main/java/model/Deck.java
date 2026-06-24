@@ -105,5 +105,9 @@ public class Deck {
 		this.reviewedToday++;
 		this.lastSession = LocalDate.now();
 	}
+
+	public LocalDate getLastSession() {
+		return this.lastSession;
+	}
 	
 }

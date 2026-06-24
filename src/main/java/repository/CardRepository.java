@@ -42,6 +42,30 @@ public class CardRepository implements Repository<Card, Long> {
 	}
 
 	@Override
+	public void update(Card card) {
+		jdbi.useHandle(handle -> {
+			handle.createUpdate("""
+			    UPDATE cards 
+			    SET deck_id = :deckId, front = :front, back = :back, type = :type, 
+			        status = :status, ease = :ease, successful_reviews = :successfulReviews, 
+			        last_interval = :lastInterval, next_review = :nextReview 
+			    WHERE id = :id
+			""")
+			.bind("id", card.getId())
+			.bind("deckId", card.getDeckId())
+			.bind("front", card.getFront())
+			.bind("back", card.getBack())
+			.bind("type", card.getType().name())
+			.bind("status", card.getStatus().name())
+			.bind("ease", card.getEase())
+			.bind("successfulReviews", card.getSuccessfulReviews())
+			.bind("lastInterval", card.getLastInterval())
+			.bind("nextReview", card.getNextReview())
+			.execute();
+		});
+	}
+
+	@Override
 	public Optional<Card> findById(Long id) {
 		return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM cards WHERE id = :id")
 			.bind("id", id)

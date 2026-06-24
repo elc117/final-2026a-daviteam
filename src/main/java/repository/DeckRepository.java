@@ -39,6 +39,26 @@ public class DeckRepository implements Repository<Deck,Long>{
 	}
 
 	@Override
+	public void update(Deck deck) {
+		jdbi.useHandle(handle -> {
+			handle.createUpdate("""
+			    UPDATE decks 
+			    SET name = :name, daily_new_limit = :dailyNewLimit, daily_review_limit = :dailyReviewLimit, 
+			        new_today = :newToday, review_today = :reviewToday, last_session_date = :lastSessionDate 
+			    WHERE id = :id
+			""")
+			.bind("id", deck.getId())
+			.bind("name", deck.getName())
+			.bind("dailyNewLimit", deck.getNewCardLimit())
+			.bind("dailyReviewLimit", deck.getReviewLimit())
+			.bind("newToday", deck.getNewCardsToday())
+			.bind("reviewToday", deck.getReviewedToday())
+			.bind("lastSessionDate", deck.getLastSession())
+			.execute();
+		});
+	}
+
+	@Override
 	public Optional<Deck> findById(Long id) {
 		Optional<Deck> deck = jdbi.withHandle(handle->{
 			Optional<Deck> d = handle.createQuery("SELECT * from decks where id = :id")

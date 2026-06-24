@@ -87,9 +87,12 @@ public class RoutesService {
 			Rating rating = Rating.valueOf(body.rating());
 			
 			Optional<Card> c = cardrepo.findById(Long.parseLong(ctx.pathParam("id")));
-			Optional<Deck> d = deckrepo.findById(c.get().getDeckId());
 			if(c.isPresent()) {
-				CardService.review(c.get(),d.get(),rating);
+				Card card = c.get();
+				Deck deck = deckrepo.findById(card.getDeckId()).orElseThrow(() -> new RuntimeException("Deck not found"));
+				CardService.review(card, deck, rating);
+				cardrepo.update(card);
+				deckrepo.update(deck);
 				ctx.status(200);
 			}else {
 				ctx.status(204);
