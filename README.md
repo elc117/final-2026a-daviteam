@@ -45,6 +45,9 @@ Por final, adicionei alguns métodos para fazer o update do texto da frente e ve
 
 # Diagrama de classes
 
+<img width="1321" height="1002" alt="studycard Class Diagram" src="https://github.com/user-attachments/assets/cef91db6-3d13-406d-9a44-1c8d51c79d82" />
+
+
 # Instruções para execução
 Como no outro projeto, esse também depende de banco de dados e precisa de chaves de API que eu não posso commitar, porém a execução é feita por dois comandos no PowerShell:
 ```
@@ -58,15 +61,23 @@ https://studycard-zeqj.onrender.com/
 
 # Resultado final
 
+<img width="1834" height="866" alt="Animação" src="https://github.com/user-attachments/assets/56ee571d-1468-4b26-9010-ce8d5d1958c3" />
+
 # Referências:
 
--- Artigos que li buscando entender como conciliar a relação entre as classes de OOP e a persistência que preciso pro sistema de flashcards (esses dados devem durar meses/anos e não apenas o tempo de uma sessão http)  
+-- Artigos que li buscando entender como conciliar a relação entre as classes de OOP e a persistência no banco de dados que preciso pro sistema de flashcards (esses dados devem durar meses/anos e não apenas o tempo de uma sessão http)  
 https://www.baeldung.com/java-dao-pattern
+
 https://medium.com/@pererikbergman/repository-design-pattern-e28c0f3e4a30
+
 https://java-design-patterns.com/patterns/repository/#detailed-explanation-of-repository-pattern-with-real-world-examples
+
 https://docs.oracle.com/javaee/7/api/javax/persistence/EntityManager.html
+
 https://www.dio.me/articles/jakarta-persistence-api-jpa
+
 https://jdbi.org/
+
 https://jdbi.org/#_statement_types
 
 -- Documentação do javalin para entender o funcionamento das rotas e como ligar uma rota a um arquivo html
@@ -94,6 +105,7 @@ https://dev.to/umangsinha12/how-spaced-repetition-actually-works-the-sm-2-algori
 
 -- Documentação da Mozilla sobre códigos HTTP para resposta às requisições
 https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status
+
 
 
 
