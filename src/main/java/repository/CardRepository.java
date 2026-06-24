@@ -23,9 +23,10 @@ public class CardRepository implements Repository<Card, Long> {
 		}
 
 		return jdbi.withHandle(handle -> {
-			handle.createUpdate("""
+			return handle.createQuery("""
 			    INSERT INTO cards (deck_id, front, back, type, status, ease, successful_reviews, last_interval, next_review)
 			    VALUES (:deckId, :front, :back, :type, :status, :ease, :successfulReviews, :lastInterval, :nextReview)
+			    RETURNING *
 			""")
 			.bind("deckId", card.getDeckId())
 			.bind("front", card.getFront())
@@ -36,8 +37,8 @@ public class CardRepository implements Repository<Card, Long> {
 			.bind("successfulReviews", card.getSuccessfulReviews())
 			.bind("lastInterval", card.getLastInterval())
 			.bind("nextReview", card.getNextReview())
-			.execute();
-			return card;
+			.map(new CardMapper())
+			.one();
 		});
 	}
 

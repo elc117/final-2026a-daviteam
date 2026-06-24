@@ -109,5 +109,9 @@ public class Deck {
 	public LocalDate getLastSession() {
 		return this.lastSession;
 	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 	
 }

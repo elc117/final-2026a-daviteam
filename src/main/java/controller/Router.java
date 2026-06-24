@@ -1,4 +1,4 @@
-package service;
+package controller;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,12 +7,14 @@ import dto.ReviewRequest;
 import io.javalin.Javalin;
 import repository.CardRepository;
 import repository.DeckRepository;
+import service.CardService;
+import service.ReviewQueueService;
 import model.Card;
 import model.Card.CardType;
 import model.Card.Rating;
 import model.Deck;
 
-public class RoutesService {
+public class Router {
 	public static void init(Javalin app,DeckRepository deckrepo,CardRepository cardrepo,ReviewQueueService revQueueService) {
 		// DECKS
 		// getters
@@ -32,6 +34,27 @@ public class RoutesService {
 			Deck deck = new Deck(name);
 			Deck saved = deckrepo.save(deck);
 			ctx.status(201).json(saved);
+		});
+		app.post("/api/decks/{id}", ctx->{
+			long id = Long.parseLong(ctx.pathParam("id"));
+			Deck deck = deckrepo.findById(id).orElseThrow(()->new RuntimeException("Deck not found"));
+			
+			String name = ctx.formParam("name");
+			String newLimitStr = ctx.formParam("newCardLimit");
+			String reviewLimitStr = ctx.formParam("reviewLimit");
+			
+			if(name != null && !name.isBlank()) {
+				deck.setName(name);
+			}
+			if(newLimitStr != null) {
+				deck.changeNewCardLimit(Integer.parseInt(newLimitStr));
+			}
+			if(reviewLimitStr != null) {
+				deck.changeReviewLimit(Integer.parseInt(reviewLimitStr));
+			}
+			
+			deckrepo.update(deck);
+			ctx.status(200).json(deck);
 		});
 		
 		// delete

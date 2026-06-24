@@ -2,11 +2,11 @@ package studycard;
 
 import org.jdbi.v3.core.Jdbi;
 
+import controller.Router;
 import io.javalin.Javalin;
 import repository.CardRepository;
 import repository.DeckRepository;
 import service.ReviewQueueService;
-import service.RoutesService;
 
 public class Main {
 
@@ -21,7 +21,7 @@ public class Main {
 		}).start(3000);
 		
 		// rotas
-		RoutesService.init(app, deckrepo, cardrepo, revqueue);
+		Router.init(app, deckrepo, cardrepo, revqueue);
 	}
 
 }
