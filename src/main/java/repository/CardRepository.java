@@ -24,8 +24,8 @@ public class CardRepository implements Repository<Card, Long> {
 
 		return jdbi.withHandle(handle -> {
 			handle.createUpdate("""
-			    INSERT INTO cards (deck_id, front, back, type, status, ease, successful_reviews, next_review)
-			    VALUES (:deckId, :front, :back, :type, :status, :ease, :successfulReviews, :nextReview)
+			    INSERT INTO cards (deck_id, front, back, type, status, ease, successful_reviews, last_interval, next_review)
+			    VALUES (:deckId, :front, :back, :type, :status, :ease, :successfulReviews, :lastInterval, :nextReview)
 			""")
 			.bind("deckId", card.getDeckId())
 			.bind("front", card.getFront())
@@ -34,6 +34,7 @@ public class CardRepository implements Repository<Card, Long> {
 			.bind("status", card.getStatus().name())
 			.bind("ease", card.getEase())
 			.bind("successfulReviews", card.getSuccessfulReviews())
+			.bind("lastInterval", card.getLastInterval())
 			.bind("nextReview", card.getNextReview())
 			.execute();
 			return card;
@@ -72,14 +73,14 @@ public class CardRepository implements Repository<Card, Long> {
 	}
 
 	public List<Card> getCardsByLatest(Long deckId) {
-		return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM cards WHERE deck_id = :id ORDER BY next_review")
+		return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM cards WHERE deck_id = :id AND next_review <= CURRENT_DATE ORDER BY next_review")
 				.bind("id", deckId)
 				.map(new CardMapper())
 				.list());
 	}
 	
 	public List<Card> getCardsByLatest(Long deckId, CardStatus status) {
-		return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM cards WHERE deck_id = :id AND status = :status ORDER BY next_review")
+		return jdbi.withHandle(handle -> handle.createQuery("SELECT * FROM cards WHERE deck_id = :id AND status = :status AND next_review <= CURRENT_DATE ORDER BY next_review")
 				.bind("id", deckId)
 				.bind("status",status.name())
 				.map(new CardMapper())

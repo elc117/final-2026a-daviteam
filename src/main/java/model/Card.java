@@ -11,6 +11,7 @@ public class Card {
 	protected CardStatus status;
 	protected int ease;
 	protected int successfulReviews;
+	protected int lastInterval;
 	protected LocalDate nextReview;
 	
 	public enum CardType{
@@ -34,14 +35,15 @@ public class Card {
 		this.deckId = deckId;
 		this.front = front;
 		this.back = back;
-		this.ease = 50;
+		this.ease = 250;
 		this.nextReview = LocalDate.now();
 		this.status = CardStatus.NEW;
 		this.type = type;
 		this.successfulReviews = 0;
+		this.lastInterval = 0;
 	}
 
-	public Card(Long id, Long deckId, String front, String back, CardType type, CardStatus status, int ease, int successfulReviews, LocalDate nextReview) {
+	public Card(Long id, Long deckId, String front, String back, CardType type, CardStatus status, int ease, int successfulReviews, int lastInterval, LocalDate nextReview) {
 		this.id = id;
 		this.deckId = deckId;
 		this.front = front;
@@ -50,6 +52,7 @@ public class Card {
 		this.status = status;
 		this.ease = ease;
 		this.successfulReviews = successfulReviews;
+		this.lastInterval = lastInterval;
 		this.nextReview = nextReview;
 	}
 
@@ -60,6 +63,7 @@ public class Card {
 		this.back = c.getBack();
 		this.ease = c.getEase();
 		this.successfulReviews = c.getSuccessfulReviews();
+		this.lastInterval = c.getLastInterval();
 		this.nextReview = c.getNextReview();
 		this.status = c.getStatus();
 		this.type = c.getType();
@@ -86,10 +90,6 @@ public class Card {
 		return deckId;
 	}
 
-	public void setDeckId(Long deckId) {
-		this.deckId = deckId;
-	}
-
 	public CardType getType() {
 		return type;
 	}
@@ -101,20 +101,40 @@ public class Card {
 	public int getEase() {
 		return ease;
 	}
+	
+	public int getSuccessfulReviews() {
+		return successfulReviews;
+	}
 
+	public LocalDate getNextReview() {
+		return nextReview;
+	}
+
+	public int getLastInterval() {
+		return lastInterval;
+	}
+	
 	public void setEase(int ease) {
 		this.ease = ease;
 	}
 
-	public int getSuccessfulReviews() {
-		return successfulReviews;
+	public void setDeckId(Long deckId) {
+		this.deckId = deckId;
 	}
 
 	public void setSuccessfulReviews(int successfulReviews) {
 		this.successfulReviews = successfulReviews;
 	}
 
-	public LocalDate getNextReview() {
-		return nextReview;
+	public void setStatus(CardStatus status) {
+		this.status = status;
+	}
+
+	public void setNextReview(LocalDate date) {
+		this.nextReview = date;
+	}
+
+	public void setLastInterval(int lastInterval) {
+		this.lastInterval = lastInterval;
 	}
 }

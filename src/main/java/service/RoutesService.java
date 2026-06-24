@@ -87,8 +87,9 @@ public class RoutesService {
 			Rating rating = Rating.valueOf(body.rating());
 			
 			Optional<Card> c = cardrepo.findById(Long.parseLong(ctx.pathParam("id")));
+			Optional<Deck> d = deckrepo.findById(c.get().getDeckId());
 			if(c.isPresent()) {
-				CardService.review(c.get(),rating);
+				CardService.review(c.get(),d.get(),rating);
 				ctx.status(200);
 			}else {
 				ctx.status(204);

@@ -22,6 +22,7 @@ public class CardMapper implements RowMapper<Card> {
 			Card.CardStatus.valueOf(rs.getString("status")),
 			rs.getInt("ease"),
 			rs.getInt("successful_reviews"),
+			rs.getInt("last_interval"),
 			rs.getObject("next_review", LocalDate.class)
 		);
 	}

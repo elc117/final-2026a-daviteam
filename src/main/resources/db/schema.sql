@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS cards(
 	back TEXT NOT NULL,
 	type VARCHAR(20) NOT NULL,
 	status VARCHAR(30) NOT NULL,
-	ease int NOT NULL,
+	ease int NOT NULL DEFAULT 250,
 	successful_reviews int NOT NULL DEFAULT 0,
+	last_interval int NOT NULL DEFAULT 0,
 	next_review DATE NOT NULL DEFAULT CURRENT_DATE
 );
